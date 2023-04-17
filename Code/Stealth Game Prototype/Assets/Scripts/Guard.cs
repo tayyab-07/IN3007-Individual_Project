@@ -19,40 +19,35 @@ public class Guard : MonoBehaviour
     public LayerMask viewMask;
     public NavMeshAgent agent;
 
-    float angleA;
-    float angleB;
-    float angleC;
+    float angleA = 30;
+    float angleB = 90;
+    float angleC = 150;
 
-    float zone1Timer;
-    float zone2Timer;
-    float zone3Timer;
-    float zone4Timer;
-    float zone5Timer;
+    float zone1Timer = 1.0f;
+    float zone2Timer = 1.5f;
+    float zone3Timer = 2.0f;
+    float zone4Timer = 3.0f;
+    float zone5Timer = 5.0f;
 
-    float farViewingDist;
-    float mediumViewingDist;
-    float nearViewingDist;
+    float farViewingDist = 40.0f;
+    float mediumViewingDist = 25.0f;
+    float nearViewingDist = 15.0f;
 
     public bool playerSeen = false;
-    public bool guardSearchingArea1 = false;
-    public bool guardSearchingArea2 = false;
-    public bool guardSearchingArea3 = false;
 
-    Vector3 xPosEdge = new Vector3(23, 1, 1);
-    Vector3 xNegEdge = new Vector3(-23, 1, 1);
-    Vector3 zPosEdge= new Vector3(1, 1, 23);
-    Vector3 zNegEdge= new Vector3(1, 1, -23);
+    [Header("Search")]
+    public bool search1 = false;
+    public bool search2 = false;
 
-    System.Random rnd = new System.Random();
+    public bool attackPlayer = false;
 
     //made variable public, to be able to check timer during run time
     public float timePlayerVisible;
-    public float searchTimer;
 
     Transform player;   
     Color initialSpotlightColour; 
     Color spottedColour;
-    Vector3 initialGuardLocation = new Vector3();
+    public Vector3 initialGuardLocation = new Vector3();
 
     // enum state to store different detection zones
     public ZoneState zone;
@@ -70,24 +65,9 @@ public class Guard : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;  //[1]
-        initialGuardLocation = transform.position;
-
-        // define angles timers and distances for zones
-        angleA = 30;
-        angleB = 90;
-        angleC = 150;
-
-        zone1Timer = 1.0f;
-        zone2Timer = 1.5f;
-        zone3Timer = 2.0f;
-        zone4Timer = 3.0f;
-        zone5Timer = 5.0f;
-
-        farViewingDist = 40.0f;
-        mediumViewingDist = 25.0f;
-        nearViewingDist = 15.0f;
 
         initialSpotlightColour = spotlight.color; //[2]
+        initialGuardLocation = transform.position;
     }
 
     // Update is called once per frame
@@ -103,8 +83,8 @@ public class Guard : MonoBehaviour
             {
                 spottedColour = Color.red;
                 agent.SetDestination(player.position);
+                attackPlayer = true;
                 playerSeen = true;
-                ResetSearch();
             }
         }
 
@@ -115,8 +95,8 @@ public class Guard : MonoBehaviour
             {
                 spottedColour = Color.magenta;
                 agent.SetDestination(player.position);
+                attackPlayer = true;
                 playerSeen = true;
-                ResetSearch();
             }
         }
 
@@ -127,8 +107,8 @@ public class Guard : MonoBehaviour
             {
                 spottedColour = Color.yellow;
                 agent.SetDestination(player.position);
+                attackPlayer = true;
                 playerSeen = true;
-                ResetSearch();
             }
         }
 
@@ -139,8 +119,8 @@ public class Guard : MonoBehaviour
             {
                 spottedColour = Color.green;
                 agent.SetDestination(player.position);
+                attackPlayer = true;
                 playerSeen = true;
-                ResetSearch();
             }
         }
 
@@ -151,63 +131,16 @@ public class Guard : MonoBehaviour
             {
                 spottedColour = Color.blue;
                 agent.SetDestination(player.position);
+                attackPlayer = true;
                 playerSeen = true;
-                ResetSearch();
             }
         }
 
         else if (zone == ZoneState.emptyZone)
         {
+            attackPlayer = false;
             spottedColour = initialSpotlightColour;
             timePlayerVisible = timePlayerVisible - Time.deltaTime;    //[2]
-        }
-
-        if (playerSeen == true && zone == ZoneState.emptyZone)
-        { 
-            searchTimer = searchTimer + Time.deltaTime;
-
-            if (searchTimer == 0) // fix all this
-            {
-                GuardLookAround();
-            }
-
-            if (searchTimer < 10) 
-            {
-                GuardLookAround();
-            }
-
-            if (searchTimer > 10 && searchTimer < 20 && guardSearchingArea1 == false)
-            {
-                GuardSearch(rnd.Next(0,3));
-                guardSearchingArea1 = true;
-            }
-
-            if (searchTimer > 20 && searchTimer < 30 && guardSearchingArea2 == false)
-            {
-                GuardSearch(rnd.Next(0, 3));
-                guardSearchingArea2 = true;
-                //GuardLookAround();
-            }
-
-            if (searchTimer > 30 && searchTimer < 40 && guardSearchingArea3 == false)
-            {
-                GuardSearch(rnd.Next(0, 3));
-                guardSearchingArea3 = true;
-                //GuardLookAround();
-            }
-
-            if (searchTimer > 40 && timePlayerVisible < 0.1)
-            {
-                agent.SetDestination(initialGuardLocation);
-                playerSeen = false;
-                ResetSearch();
-            }
-
-        }
-
-        if (playerSeen == false)
-        {
-            ResetSearch();
         }
 
         // timer doesnt exceed 0 or zone 5 timer
@@ -217,7 +150,7 @@ public class Guard : MonoBehaviour
 
     public void StateHandler()
     {
-        Vector3 distToPlayer;
+        Vector3 distToPlayer; // make these locally defined once
         float playerGuardAngle;
 
         // conditional statements to find out what zone a player is in
@@ -295,50 +228,6 @@ public class Guard : MonoBehaviour
         {
             zone = ZoneState.emptyZone;
         }
-    }
-
-
-    private void GuardSearch(int corner)
-    {
-        if (corner == 0)
-        {
-            agent.SetDestination(xPosEdge + new Vector3(rnd.Next(-2, 2), 0, rnd.Next(-6, 6)));
-        }
-
-        else if (corner == 1)
-        {
-            agent.SetDestination(xNegEdge + new Vector3(rnd.Next(-2, 2), 0, rnd.Next(-6, 6)));
-        }
-
-        else if (corner == 2)
-        {
-            agent.SetDestination(zPosEdge + new Vector3(rnd.Next(-6, 6), 0 ,rnd.Next(-2, 2)));
-        }
-
-        else if (corner == 3)
-        {
-            agent.SetDestination(zNegEdge + new Vector3(rnd.Next(-6, 6), 0, rnd.Next(-2, 2)));
-        }
-    }
-
-    private void ResetSearch()
-    {
-        searchTimer = 0;
-        guardSearchingArea1 = false;
-        guardSearchingArea2 = false;
-        guardSearchingArea3 = false;
-    }
-
-    private void GuardLookAround()
-    {
-        float guardRotatePos = 0;
-        guardRotatePos = guardRotatePos + (Time.deltaTime * 0.05f);
-
-        float guardRotateNeg = 0;
-        guardRotateNeg = guardRotateNeg - (Time.deltaTime * 0.05f);
-
-        transform.Rotate(new Vector3(0, 1, 0), 1.5f);
-        //transform.Rotate(new Vector3(0, 1, 0), guardRotateNeg);
     }
 
     // draws gizmo to help visulise distance in scene view
