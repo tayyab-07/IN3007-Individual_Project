@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,6 +19,11 @@ public class Guard : MonoBehaviour
     public Light spotlight;
     public LayerMask viewMask;
     public NavMeshAgent agent;
+    public Transform pathHolder;
+
+    public float speed = 5;
+    public float waitTime = .3f;
+    public float turnSpeed = 90;
 
     float angleA = 30;
     float angleB = 90;
@@ -67,7 +73,36 @@ public class Guard : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;  //[1]
 
         initialSpotlightColour = spotlight.color; //[2]
-        initialGuardLocation = transform.position;
+        //initialGuardLocation = transform.position;
+
+        Vector3[] waypoints = new Vector3[pathHolder.childCount];
+        for (int i = 0; i < waypoints.Length; i++)
+        {
+            waypoints[i] = pathHolder.GetChild(i).position;
+            waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
+        }
+
+    }
+
+    IEnumerator FollowPath(Vector3[] waypoints)
+    {
+        transform.position = waypoints[0];
+
+        int targetWaypointIndex = 1;
+        Vector3 targetWaypoint = waypoints[targetWaypointIndex];
+        transform.LookAt(targetWaypoint);
+
+        while (true)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetWaypoint, speed * Time.deltaTime);
+            if (transform.position == targetWaypoint)
+            {
+                targetWaypointIndex = (targetWaypointIndex + 1) % waypoints.Length;
+                targetWaypoint = waypoints[targetWaypointIndex];
+                yield return new WaitForSeconds(waitTime);
+            }
+            yield return null;
+        }
     }
 
     // Update is called once per frame
@@ -235,6 +270,19 @@ public class Guard : MonoBehaviour
     {
         Gizmos.color = Color.red;  //[1]
         Gizmos.DrawRay(transform.position, transform.forward * 30);  //[1]
+
+
+        Gizmos.color = Color.green;
+        Vector3 startPosition = pathHolder.GetChild(0).position;
+        Vector3 previousPosition = startPosition;
+
+        foreach (Transform waypoint in pathHolder)
+        {
+            Gizmos.DrawSphere(waypoint.position, .3f);
+            Gizmos.DrawLine(previousPosition, waypoint.position);
+            previousPosition = waypoint.position;
+        }
+        Gizmos.DrawLine(previousPosition, startPosition);
     }
 
 }

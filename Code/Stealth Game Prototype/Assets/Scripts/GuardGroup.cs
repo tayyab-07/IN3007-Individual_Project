@@ -43,6 +43,7 @@ public class GuardGroup : MonoBehaviour
             if (guards[i].zone == Guard.ZoneState.emptyZone && guards[i].playerSeen == true)
             {
                 ConductSearch();
+                break;
             }
         }
     }
@@ -83,9 +84,12 @@ public class GuardGroup : MonoBehaviour
 
             if (searchTimer > 30)
             {
-                guards[i].agent.SetDestination(guards[i].initialGuardLocation);
-                guards[i].playerSeen = false;
-                ResetSearch();
+                for (int j = 0; j < guards.Length; j++)
+                { 
+                    guards[j].agent.SetDestination(guards[j].initialGuardLocation);
+                    guards[j].playerSeen = false;
+                    ResetSearch();
+                }
             }
         } 
     }
