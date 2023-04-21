@@ -36,7 +36,7 @@ public class GuardGroup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckDetection();
+        
 
         for (int i = 0; i < guards.Length; i++)
         {
@@ -46,6 +46,8 @@ public class GuardGroup : MonoBehaviour
                 break;
             }
         }
+
+        CheckDetection();
     }
 
     void CheckDetection()

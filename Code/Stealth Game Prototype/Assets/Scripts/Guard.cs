@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using System.Threading;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -19,11 +21,6 @@ public class Guard : MonoBehaviour
     public Light spotlight;
     public LayerMask viewMask;
     public NavMeshAgent agent;
-    public Transform pathHolder;
-
-    public float speed = 5;
-    public float waitTime = .3f;
-    public float turnSpeed = 90;
 
     float angleA = 30;
     float angleB = 90;
@@ -55,6 +52,14 @@ public class Guard : MonoBehaviour
     Color spottedColour;
     public Vector3 initialGuardLocation = new Vector3();
 
+    public Transform[] waypoints;
+    public int currentWaypointIndex;
+    private float speed = 2.0f;
+    private float waitTime = 2.5f;
+    private float waitCounter = 0.0f;
+    private bool waiting = false;
+    public float turnSpeed = 90.0f;
+
     // enum state to store different detection zones
     public ZoneState zone;
     public enum ZoneState
@@ -73,41 +78,52 @@ public class Guard : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;  //[1]
 
         initialSpotlightColour = spotlight.color; //[2]
-        //initialGuardLocation = transform.position;
+        initialGuardLocation = transform.position;
 
-        Vector3[] waypoints = new Vector3[pathHolder.childCount];
-        for (int i = 0; i < waypoints.Length; i++)
-        {
-            waypoints[i] = pathHolder.GetChild(i).position;
-            waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
-        }
-
-    }
-
-    IEnumerator FollowPath(Vector3[] waypoints)
-    {
-        transform.position = waypoints[0];
-
-        int targetWaypointIndex = 1;
-        Vector3 targetWaypoint = waypoints[targetWaypointIndex];
-        transform.LookAt(targetWaypoint);
-
-        while (true)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, targetWaypoint, speed * Time.deltaTime);
-            if (transform.position == targetWaypoint)
-            {
-                targetWaypointIndex = (targetWaypointIndex + 1) % waypoints.Length;
-                targetWaypoint = waypoints[targetWaypointIndex];
-                yield return new WaitForSeconds(waitTime);
-            }
-            yield return null;
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        Transform wp = waypoints[currentWaypointIndex];
+
+        if (waiting == true)
+        { 
+            waitCounter = waitCounter + Time.deltaTime;
+            if (waitCounter < waitTime)
+            {
+                Vector3 dirToLookTarget = (wp.position - transform.position).normalized;
+                float targetAngle = 90 - Mathf.Atan2(dirToLookTarget.z, dirToLookTarget.x) * Mathf.Rad2Deg;
+
+                if (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.y, targetAngle)) > 0.05f)
+                { 
+                    float angle = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetAngle, turnSpeed * Time.deltaTime);
+                    transform.eulerAngles = Vector3.up * angle;
+                }
+                
+                return;
+            }
+            waiting = false;
+        }
+
+        if (Vector3.Distance(transform.position, wp.position) < 0.1f)
+        {
+            transform.position = wp.position;
+            waitCounter = 0.0f;
+            waiting = true;
+
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
+        }
+        else
+        { 
+            transform.position = Vector3.MoveTowards(transform.position, wp.position, speed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, wp.position) > 2.0f)
+            { 
+                transform.LookAt(wp.position);
+            }
+        }
+
         StateHandler();
 
         // conditional statements set colour after set amount of time based on zone
@@ -270,19 +286,6 @@ public class Guard : MonoBehaviour
     {
         Gizmos.color = Color.red;  //[1]
         Gizmos.DrawRay(transform.position, transform.forward * 30);  //[1]
-
-
-        Gizmos.color = Color.green;
-        Vector3 startPosition = pathHolder.GetChild(0).position;
-        Vector3 previousPosition = startPosition;
-
-        foreach (Transform waypoint in pathHolder)
-        {
-            Gizmos.DrawSphere(waypoint.position, .3f);
-            Gizmos.DrawLine(previousPosition, waypoint.position);
-            previousPosition = waypoint.position;
-        }
-        Gizmos.DrawLine(previousPosition, startPosition);
     }
 
 }
