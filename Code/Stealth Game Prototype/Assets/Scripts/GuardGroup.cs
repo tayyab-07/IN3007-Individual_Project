@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class GuardGroup : MonoBehaviour
 {
-
-    public Guard[] guards;
     Transform player;
-
     System.Random rnd = new System.Random();
+
+    [Header("Guards")]
+    public Guard[] guards;
 
     [Header("Search Locations")]
     public Vector3 loc0 = new Vector3(18, 0, 18);
@@ -25,7 +22,6 @@ public class GuardGroup : MonoBehaviour
 
     [Header("Search")]
     public float searchTimer;
-    public bool searching = false;
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +32,9 @@ public class GuardGroup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-
+        // Check to see if any of the guards have seen the player
+        // If they have start the search, regardless if the others havent seen the player
+        // makes it look like the guuards have communicated and are working together
         for (int i = 0; i < guards.Length; i++)
         {
             if (guards[i].zone == Guard.ZoneState.emptyZone && guards[i].playerSeen == true)
@@ -52,6 +49,9 @@ public class GuardGroup : MonoBehaviour
 
     void CheckDetection()
     {
+        // Method to check if any of the guard are currently chasing the player
+        // If they are, set the other guards to go to the players location so they can chase too
+
         for (int i = 0; i < guards.Length; i++)
         {
             if (guards[i].attackPlayer == true)
@@ -68,8 +68,12 @@ public class GuardGroup : MonoBehaviour
 
     void ConductSearch()
     {
+        // Method to organise the guards to go search
+
+        // Search for 30 seconds then reset to start location
         searchTimer = searchTimer + Time.deltaTime;
 
+        // Set all guards to search one place until 15sec and another until 30sec
         for (int i = 0; i < guards.Length; i++)
         {
             if (searchTimer > 2 && searchTimer < 15 && guards[i].search1 == false)
@@ -84,6 +88,7 @@ public class GuardGroup : MonoBehaviour
                 guards[i].search2 = true;
             }
 
+            // After 30 sec, tell guards to go back to starting location
             if (searchTimer > 30)
             {
                 for (int j = 0; j < guards.Length; j++)
@@ -98,6 +103,8 @@ public class GuardGroup : MonoBehaviour
 
     void GuardSearch(Guard guard)
     {
+        // Method to randomly assign a guard to a search location
+
         float rand = rnd.Next(0, 10);
 
         switch (rand)
@@ -137,6 +144,8 @@ public class GuardGroup : MonoBehaviour
 
     void ResetSearch()
     {
+        // Method to reset the searchtimer and reset the guards search bools
+
         searchTimer = 0;
         for (int i = 0; i < guards.Length; i++)
         {
@@ -144,6 +153,5 @@ public class GuardGroup : MonoBehaviour
             guards[i].search2 = false;
         }
     }
-
 
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // tutorial from: https://www.youtube.com/watch?v=f473C43s8nE&t=379s&ab_channel=Dave%2FGameDevelopment
+// This file is NOT written by me
 
 public class MoveCamera : MonoBehaviour
 {

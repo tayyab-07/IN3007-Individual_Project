@@ -191,20 +191,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   agent: {fileID: 78096659}
-  playerSeen: 0
+  timePlayerVisible: 0
+  zone: 0
   search1: 0
   search2: 0
+  playerSeen: 0
   attackPlayer: 0
-  timePlayerVisible: 0
   initialGuardLocation: {x: 0, y: 0, z: 0}
-  waypoints:
+  patrolPoints:
   - {fileID: 387967785}
   - {fileID: 32799367}
   - {fileID: 815716135}
   - {fileID: 606065013}
-  currentWaypointIndex: 0
-  turnSpeed: 90
-  zone: 0
+  currentPatrolPoint: 0
 --- !u!136 &78096655
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1179,7 +1178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 334430571}
   m_Layer: 0
-  m_Name: Path (2)
+  m_Name: Guard 2 Path
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2356,7 +2355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 974076359}
   m_Layer: 0
-  m_Name: Path (1)
+  m_Name: Guard 1 Path
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2513,7 +2512,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1078556029}
   m_Layer: 0
-  m_Name: Path (4)
+  m_Name: Guard 4 Path
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2986,21 +2985,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   agent: {fileID: 1441955770}
-  playerSeen: 0
+  timePlayerVisible: 0
+  zone: 0
   search1: 0
   search2: 0
+  playerSeen: 0
   attackPlayer: 0
-  timePlayerVisible: 0
   initialGuardLocation: {x: 0, y: 0, z: 0}
-  waypoints:
+  patrolPoints:
   - {fileID: 1405055654}
   - {fileID: 618329789}
   - {fileID: 994797772}
   - {fileID: 1024554606}
   - {fileID: 1908749591}
-  currentWaypointIndex: 0
-  turnSpeed: 90
-  zone: 0
+  currentPatrolPoint: 0
 --- !u!136 &1441955772
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3375,7 +3373,6 @@ MonoBehaviour:
   loc8: {x: 8, y: 0, z: 3.5}
   loc9: {x: -8.5, y: 0, z: 17}
   searchTimer: 0
-  searching: 0
 --- !u!1 &1586754854
 GameObject:
   m_ObjectHideFlags: 0
@@ -3451,21 +3448,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   agent: {fileID: 1586754856}
-  playerSeen: 0
+  timePlayerVisible: 0
+  zone: 0
   search1: 0
   search2: 0
+  playerSeen: 0
   attackPlayer: 0
-  timePlayerVisible: 0
   initialGuardLocation: {x: 0, y: 0, z: 0}
-  waypoints:
+  patrolPoints:
   - {fileID: 105149537}
   - {fileID: 1493004100}
   - {fileID: 472653624}
   - {fileID: 438504566}
   - {fileID: 1017079680}
-  currentWaypointIndex: 0
-  turnSpeed: 90
-  zone: 0
+  currentPatrolPoint: 0
 --- !u!136 &1586754858
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3571,7 +3567,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1650425776}
   m_Layer: 0
-  m_Name: Path (3)
+  m_Name: Guard 3 Path
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3732,7 +3728,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1709923851}
   m_Layer: 0
-  m_Name: Paths
+  m_Name: Patrol Paths
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4211,22 +4207,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   agent: {fileID: 1964906706}
-  playerSeen: 0
+  timePlayerVisible: 0
+  zone: 0
   search1: 0
   search2: 0
+  playerSeen: 0
   attackPlayer: 0
-  timePlayerVisible: 0
   initialGuardLocation: {x: 0, y: 0, z: 0}
-  waypoints:
+  patrolPoints:
   - {fileID: 562991166}
   - {fileID: 639240395}
   - {fileID: 580402075}
   - {fileID: 1658643007}
   - {fileID: 1493429686}
   - {fileID: 1232167802}
-  currentWaypointIndex: 0
-  turnSpeed: 90
-  zone: 0
+  currentPatrolPoint: 0
 --- !u!136 &1964906708
 CapsuleCollider:
   m_ObjectHideFlags: 0
