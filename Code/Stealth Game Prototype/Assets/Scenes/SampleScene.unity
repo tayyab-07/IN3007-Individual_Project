@@ -165,8 +165,8 @@ GameObject:
   - component: {fileID: 78096657}
   - component: {fileID: 78096656}
   - component: {fileID: 78096655}
-  - component: {fileID: 78096654}
   - component: {fileID: 78096659}
+  - component: {fileID: 78096660}
   m_Layer: 8
   m_Name: Guard (1)
   m_TagString: Untagged
@@ -174,36 +174,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &78096654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 78096653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7827f77a416c3ab4dbbdc6d1d79f325e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spotlight: {fileID: 1537665229}
-  viewMask:
-    serializedVersion: 2
-    m_Bits: 64
-  agent: {fileID: 78096659}
-  timePlayerVisible: 0
-  zone: 0
-  search1: 0
-  search2: 0
-  playerSeen: 0
-  attackPlayer: 0
-  initialGuardLocation: {x: 0, y: 0, z: 0}
-  patrolPoints:
-  - {fileID: 387967785}
-  - {fileID: 32799367}
-  - {fileID: 815716135}
-  - {fileID: 606065013}
-  currentPatrolPoint: 0
 --- !u!136 &78096655
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -304,6 +274,23 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &78096660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78096653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f33a646a6f8964c977757f6978b79c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints:
+  - {fileID: 387967785}
+  - {fileID: 32799367}
+  - {fileID: 815716135}
+  - {fileID: 606065013}
 --- !u!1 &102279773
 GameObject:
   m_ObjectHideFlags: 0
@@ -3358,7 +3345,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guards:
-  - {fileID: 78096654}
   - {fileID: 1586754857}
   - {fileID: 1964906707}
   - {fileID: 1441955771}
