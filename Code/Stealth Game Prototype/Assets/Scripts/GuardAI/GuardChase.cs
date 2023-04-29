@@ -1,10 +1,13 @@
 using UnityEngine;
 using BehaviorTree;
-using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.AI;
 
-public class ChasePlayer : Node
+public class GuardChase : Node
 {
-    private Transform _transform;
+    private Transform _player;
+    private NavMeshAgent _agent;
+    private Light _spotlight;
+    private GuardBehaviourTree.ZoneState _zone;
 
     public float timePlayerVisible;
 
@@ -17,92 +20,104 @@ public class ChasePlayer : Node
     Color spottedColour;
     Color initialSpotlightColour;
 
-    public ChasePlayer(Transform transform)
+    public GuardChase(Transform player, NavMeshAgent agent, Light spotlight, GuardBehaviourTree.ZoneState zone)
     { 
-        _transform = transform;
-        initialSpotlightColour = GuardBehaviourTree.spotlight.color; //[2]
+        _player = player;
+        _agent = agent;
+        _spotlight = spotlight;
+        _zone = zone;
     }
 
     public override NodeState Evaluate()
     {
-        Transform target = (Transform)GetData("target");
+        initialSpotlightColour = _spotlight.color; //[2]
 
         // Method to chase player if they are caught in a vision zone for enough time
 
         // If player is within a zone, start a timer
         // If timer exceeds limit, change spotlight colour to indicate detection, chase player and set bools to true
 
-        if (GuardBehaviourTree.zone == GuardBehaviourTree.ZoneState.zone1)
+        if (_zone == GuardBehaviourTree.ZoneState.zone1)
         {
             timePlayerVisible = timePlayerVisible + Time.deltaTime;  //[2] 
             if (timePlayerVisible >= zone1Timer)
             {
                 spottedColour = Color.red;
-                GuardBehaviourTree.agent.SetDestination(GuardBehaviourTree.player.position);
-                GuardBehaviourTree.attackPlayer = true;
-                GuardBehaviourTree.playerSeen = true;
+                Chaseplayer();
             }
         }
 
-        else if (GuardBehaviourTree.zone == GuardBehaviourTree.ZoneState.zone2)
+        else if (_zone == GuardBehaviourTree.ZoneState.zone2)
         {
             timePlayerVisible = timePlayerVisible + Time.deltaTime;  //[2]
             if (timePlayerVisible >= zone2Timer)
             {
                 spottedColour = Color.magenta;
-                GuardBehaviourTree.agent.SetDestination(GuardBehaviourTree.player.position);
-                GuardBehaviourTree.attackPlayer = true;
-                GuardBehaviourTree.playerSeen = true;
+                Chaseplayer();
             }
         }
 
-        else if (GuardBehaviourTree.zone == GuardBehaviourTree.ZoneState.zone3)
+        else if (_zone == GuardBehaviourTree.ZoneState.zone3)
         {
             timePlayerVisible = timePlayerVisible + Time.deltaTime;   //[2]
             if (timePlayerVisible >= zone3Timer)
             {
                 spottedColour = Color.yellow;
-                GuardBehaviourTree.agent.SetDestination(GuardBehaviourTree.player.position);
-                GuardBehaviourTree.attackPlayer = true;
-                GuardBehaviourTree.playerSeen = true;
+                Chaseplayer();
             }
         }
 
-        else if (GuardBehaviourTree.zone == GuardBehaviourTree.ZoneState.zone4)
+        else if (_zone == GuardBehaviourTree.ZoneState.zone4)
         {
             timePlayerVisible = timePlayerVisible + Time.deltaTime;   //[2]
             if (timePlayerVisible >= zone4Timer)
             {
                 spottedColour = Color.green;
-                GuardBehaviourTree.agent.SetDestination(GuardBehaviourTree.player.position);
-                GuardBehaviourTree.attackPlayer = true;
-                GuardBehaviourTree.playerSeen = true;
+                Chaseplayer();
             }
         }
 
-        else if (GuardBehaviourTree.zone == GuardBehaviourTree.ZoneState.zone5)
+        else if (_zone == GuardBehaviourTree.ZoneState.zone5)
         {
             timePlayerVisible = timePlayerVisible + Time.deltaTime;   //[2]
             if (timePlayerVisible >= zone5Timer)
             {
                 spottedColour = Color.blue;
-                GuardBehaviourTree.agent.SetDestination(GuardBehaviourTree.player.position);
-                GuardBehaviourTree.attackPlayer = true;
-                GuardBehaviourTree.playerSeen = true;
+                Chaseplayer();
             }
         }
 
-        // if player is not in a zone, decremment the timer
-        else if (GuardBehaviourTree.zone == GuardBehaviourTree.ZoneState.emptyZone)
+        // if player is not in a zone, decrement the timer
+        else if (_zone == GuardBehaviourTree.ZoneState.emptyZone)
         {
             GuardBehaviourTree.attackPlayer = false;
             spottedColour = initialSpotlightColour;
             timePlayerVisible = timePlayerVisible - Time.deltaTime;    //[2]
+
+            if (timePlayerVisible == 0)
+            {
+                state = NodeState.FAILURE;
+                return state;
+            }
         }
 
         // timer doesnt exceed 0 or zone 5 timer
         timePlayerVisible = Mathf.Clamp(timePlayerVisible, 0, zone5Timer);   //[2]
-        GuardBehaviourTree.spotlight.color = spottedColour;
+        _spotlight.color = spottedColour;
+
+        state = NodeState.RUNNING;
+        return state;
+
+    }
+
+    public NodeState Chaseplayer()
+    {
+        _agent.SetDestination(_player.position);
+        GuardBehaviourTree.attackPlayer = true;
+        GuardBehaviourTree.playerSeen = true;
+
+        state = NodeState.SUCCESS;
+        return state;
     }
 
 }

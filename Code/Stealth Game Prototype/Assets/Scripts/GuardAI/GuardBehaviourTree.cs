@@ -1,4 +1,5 @@
 using BehaviorTree;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,15 +7,15 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 {
     public UnityEngine.Transform[] patrolPoints;
 
-    public static LayerMask viewMask;
-    public static Transform player;
-    public static NavMeshAgent agent;
-    public static Light spotlight;
+    public LayerMask viewMask;
+    public Transform player;
+    public NavMeshAgent agent;
+    public Light spotlight;
 
     public static bool playerSeen = false;
     public static bool attackPlayer = false;
 
-    public static ZoneState zone;
+    public ZoneState zone;
     public enum ZoneState
     {
         emptyZone,
@@ -27,7 +28,27 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
     protected override Node SetupTree()
     {
-        Node root = new GuardPatrol(transform, patrolPoints);
+
+        Node root = new Selector(new List<Node>
+        { 
+            /*
+             new Sequence (new List<Node>
+            { 
+                new CheckEnemyInAttackRange(transform, player, viewMask, zone),
+                new GuardAttack(transform),
+            }),
+             */
+            
+
+            new Sequence (new List<Node>
+            { 
+                new CheckEnemyVisible(transform, player, viewMask, zone),
+                new GuardChase(player, agent, spotlight, zone),
+            }),
+
+            new GuardPatrol(transform, patrolPoints),
+        });
+
         return root;
     }
 }

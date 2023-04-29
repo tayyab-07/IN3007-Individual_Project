@@ -1,25 +1,22 @@
-using BehaviorTree;
 using UnityEngine;
-using static Guard;
+using BehaviorTree;
 
-public class CheckEnemyVisible : Node
+public class CheckEnemyInAttackRange : Node
 {
     private Transform _transform;
     private Transform _player;
     private LayerMask _viewMask;
     private GuardBehaviourTree.ZoneState _zone;
 
+
     float angleA = 30;
-    float angleB = 90;
     float angleC = 150;
 
-    float farViewingDist = 40.0f;
     float mediumViewingDist = 25.0f;
     float nearViewingDist = 15.0f;
 
-
-    public CheckEnemyVisible(Transform transform, Transform player, LayerMask viewMask, GuardBehaviourTree.ZoneState zone)
-    { 
+    public CheckEnemyInAttackRange(Transform transform, Transform player, LayerMask viewMask, GuardBehaviourTree.ZoneState zone)
+    {
         _transform = transform;
         _player = player;
         _viewMask = viewMask;
@@ -70,53 +67,6 @@ public class CheckEnemyVisible : Node
                 if (playerGuardAngle < angleA / 2f)
                 {
                     _zone = GuardBehaviourTree.ZoneState.zone2;
-                    state = NodeState.SUCCESS;
-                    return state;
-                }
-
-                else if (playerGuardAngle < angleB / 2f)
-                {
-                    _zone = GuardBehaviourTree.ZoneState.zone3;
-                    state = NodeState.SUCCESS;
-                    return state;
-                }
-
-                else if (playerGuardAngle < angleC / 2f)
-                {
-                    _zone = GuardBehaviourTree.ZoneState.zone4;
-                    state = NodeState.SUCCESS;
-                    return state;
-                }
-
-                else
-                {
-                    _zone = GuardBehaviourTree.ZoneState.emptyZone;
-                    state = NodeState.FAILURE;
-                    return state;
-                }
-            }
-
-            // Checks to see the distance between the guard and player
-            else if (Vector3.Distance(_transform.position, _player.position) < farViewingDist)  //[1]
-            {
-                // Checks to see the angle between the guard and player
-                if (playerGuardAngle < angleA / 2f)
-                {
-                    _zone = GuardBehaviourTree.ZoneState.zone3;
-                    state = NodeState.SUCCESS;
-                    return state;
-                }
-
-                else if (playerGuardAngle < angleB / 2f)
-                {
-                    _zone = GuardBehaviourTree.ZoneState.zone4;
-                    state = NodeState.SUCCESS;
-                    return state;
-                }
-
-                else if (playerGuardAngle < angleC / 2f)
-                {
-                    _zone = GuardBehaviourTree.ZoneState.zone5;
                     state = NodeState.SUCCESS;
                     return state;
                 }
