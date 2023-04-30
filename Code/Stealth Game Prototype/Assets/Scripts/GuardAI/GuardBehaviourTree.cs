@@ -15,7 +15,9 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     public static bool playerSeen = false;
     public static bool attackPlayer = false;
 
-    public ZoneState zone;
+    public static float timePlayerVisible;
+
+    public static ZoneState zone;
     public enum ZoneState
     {
         emptyZone,
@@ -42,12 +44,13 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
             new Sequence (new List<Node>
             { 
-                new CheckEnemyVisible(transform, player, viewMask, zone),
-                new GuardChase(player, agent, spotlight, zone),
+                new CheckEnemyVisible(transform, player, viewMask),
+                new GuardChase(player, agent, spotlight),
             }),
 
             new GuardPatrol(transform, patrolPoints),
-        });
+
+        }) ;
 
         return root;
     }
