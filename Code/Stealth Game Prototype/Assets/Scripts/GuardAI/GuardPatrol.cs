@@ -1,10 +1,13 @@
 using UnityEngine;
 using BehaviorTree;
+using UnityEngine.AI;
+using System.Diagnostics.Tracing;
 
 public class GuardPatrol : Node
 {
     private Transform _guardTransform;
     private Transform[] _patrolPoints;
+    private NavMeshAgent _agent;
 
     [Header("Patrol")]
     public Transform[] patrolPoints;
@@ -15,10 +18,11 @@ public class GuardPatrol : Node
     private bool stopped = false;
     private float patrolRotationSpeed = 90.0f;
 
-    public GuardPatrol(Transform guardTransform, Transform[] patrolPoints)
+    public GuardPatrol(Transform guardTransform, Transform[] patrolPoints, NavMeshAgent agent)
     { 
         _guardTransform = guardTransform;
         _patrolPoints = patrolPoints;
+        _agent = agent;
     }
 
     public override NodeState Evaluate()
@@ -31,43 +35,25 @@ public class GuardPatrol : Node
         if (stopped == true)
         {
             patrolStopTimer = patrolStopTimer + Time.deltaTime;
-            if (patrolStopTimer < patrolStopDuration)
+            if (patrolStopTimer > patrolStopDuration)
             {
-                Vector3 targetDirection = (wp.position - _guardTransform.position).normalized;  //[1]
-                float angleToTarget = 90 - Mathf.Atan2(targetDirection.z, targetDirection.x) * Mathf.Rad2Deg;  //[1]
-
-                if (Mathf.Abs(Mathf.DeltaAngle(_guardTransform.eulerAngles.y, angleToTarget)) > 0.05f)  //[1]
-                {
-                    float angle = Mathf.MoveTowardsAngle(_guardTransform.eulerAngles.y, angleToTarget, patrolRotationSpeed * Time.deltaTime); //[1]
-                    _guardTransform.eulerAngles = Vector3.up * angle; //[1]
-                }
-            }
-
-            else
-            { 
                 stopped = false;
             }
         }
 
-        else
+        else if (stopped == false)
         {
             // if guard reaches a waypoint set their target to the next waypoint
-            if (Vector3.Distance(_guardTransform.position, wp.position) < 0.1f)
+            if (Vector3.Distance(_guardTransform.position, wp.position) < (_agent.stoppingDistance + 0.2f))
             {
-                _guardTransform.position = wp.position;
                 patrolStopTimer = 0.0f;
                 stopped = true;
 
                 currentPatrolPoint = (currentPatrolPoint + 1) % _patrolPoints.Length;
             }
-            // otherwise keep looking at the current waypoint
             else
             {
-                _guardTransform.position = Vector3.MoveTowards(_guardTransform.position, wp.position, patrolSpeed * Time.deltaTime);
-                if (Vector3.Distance(_guardTransform.position, wp.position) > 2.0f)
-                {
-                    _guardTransform.LookAt(wp.position);
-                }
+                _agent.SetDestination(wp.position);
             }
         }
 

@@ -1,6 +1,12 @@
 using BehaviorTree;
 using UnityEngine;
 
+
+/// <summary>
+/// ///////////////////// should be check enemy zone
+/// </summary>
+
+
 public class CheckEnemyVisible : Node
 {
     private Transform _transform;
@@ -27,7 +33,6 @@ public class CheckEnemyVisible : Node
     {
         // conditional statements to find out what zone a player is in
         // always set to empty zone if any condition isnt met
-
         
         Vector3 distToPlayer = (_player.position - _transform.position).normalized;  //[1]
         float playerGuardAngle = Vector3.Angle(_transform.forward, distToPlayer);  //[1]
@@ -42,22 +47,16 @@ public class CheckEnemyVisible : Node
                 if (playerGuardAngle < angleA / 2f)
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone1;
-                    state = NodeState.SUCCESS;
-                    return state;
                 }
 
                 else if (playerGuardAngle < angleC / 2f)
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone2;
-                    state = NodeState.SUCCESS;
-                    return state;
                 }
 
                 else
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
-                    state = NodeState.FAILURE;
-                    return state;
                 }
             }
 
@@ -68,29 +67,21 @@ public class CheckEnemyVisible : Node
                 if (playerGuardAngle < angleA / 2f)
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone2;
-                    state = NodeState.SUCCESS;
-                    return state;
                 }
 
                 else if (playerGuardAngle < angleB / 2f)
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone3;
-                    state = NodeState.SUCCESS;
-                    return state;
                 }
 
                 else if (playerGuardAngle < angleC / 2f)
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone4;
-                    state = NodeState.SUCCESS;
-                    return state;
                 }
 
                 else
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
-                    state = NodeState.FAILURE;
-                    return state;
                 }
             }
 
@@ -101,45 +92,36 @@ public class CheckEnemyVisible : Node
                 if (playerGuardAngle < angleA / 2f)
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone3;
-                    state = NodeState.SUCCESS;
-                    return state;
                 }
 
                 else if (playerGuardAngle < angleB / 2f)
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone4;
-                    state = NodeState.SUCCESS;
-                    return state;
                 }
 
                 else if (playerGuardAngle < angleC / 2f)
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone5;
-                    state = NodeState.SUCCESS;
-                    return state;
                 }
 
                 else
                 {
                     GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
-                    state = NodeState.FAILURE;
-                    return state;
                 }
             }
 
             else
             {
                 GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
-                state = NodeState.FAILURE;
-                return state;
             }
         }
 
         else
         {
             GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
-            state = NodeState.FAILURE;
-            return state;
         }
+
+        state = NodeState.SUCCESS;
+        return state;
     }
 }

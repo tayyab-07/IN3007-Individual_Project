@@ -45,10 +45,11 @@ public class GuardBehaviourTree : BehaviorTree.Tree
             new Sequence (new List<Node>
             { 
                 new CheckEnemyVisible(transform, player, viewMask),
-                new GuardChase(player, agent, spotlight),
+                new CheckEnemySpotted(spotlight),
+                new GuardChase(player, agent),
             }),
 
-            new GuardPatrol(transform, patrolPoints),
+            new GuardPatrol(transform, patrolPoints, agent),
 
         }) ;
 
