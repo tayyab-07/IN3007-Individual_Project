@@ -12,8 +12,15 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     public NavMeshAgent agent;
     public Light spotlight;
 
-    public static bool playerSeen = false;
     public static bool attackPlayer = false;
+    public static bool playerSeen = false;
+    public static bool playerVisible = false;
+
+    public static bool conductAttack = false;
+    public static bool conductSearch = false;
+
+    public static bool search1 = false;
+    public static bool search2 = false;    
 
     public static float timePlayerVisible;
 
@@ -32,22 +39,21 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     {
 
         Node root = new Selector(new List<Node>
-        { 
-            /*
-             new Sequence (new List<Node>
+        {   
+            new Sequence (new List<Node>
             { 
-                new CheckEnemyInAttackRange(transform, player, viewMask, zone),
+                new CheckEnemyInAttackRange(),
                 new GuardAttack(transform),
             }),
-             */
-            
 
             new Sequence (new List<Node>
             { 
-                new CheckEnemyVisible(transform, player, viewMask),
+                new CheckEnemyZone(transform, player, viewMask),
                 new CheckEnemySpotted(spotlight),
                 new GuardChase(player, agent),
             }),
+
+            new GuardOrganise(),
 
             new GuardPatrol(transform, patrolPoints, agent),
 

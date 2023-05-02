@@ -1,7 +1,6 @@
 using UnityEngine;
 using BehaviorTree;
 using UnityEngine.AI;
-using System.Diagnostics.Tracing;
 
 public class GuardPatrol : Node
 {
@@ -12,11 +11,9 @@ public class GuardPatrol : Node
     [Header("Patrol")]
     public Transform[] patrolPoints;
     public int currentPatrolPoint;
-    private float patrolSpeed = 2.0f;
     private float patrolStopDuration = 2.5f;
     private float patrolStopTimer = 0.0f;
     private bool stopped = false;
-    private float patrolRotationSpeed = 90.0f;
 
     public GuardPatrol(Transform guardTransform, Transform[] patrolPoints, NavMeshAgent agent)
     { 

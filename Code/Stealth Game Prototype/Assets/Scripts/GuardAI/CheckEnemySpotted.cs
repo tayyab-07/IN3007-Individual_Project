@@ -1,5 +1,4 @@
 using BehaviorTree;
-using UnityEngine.AI;
 using UnityEngine;
 
 public class CheckEnemySpotted : Node
@@ -36,6 +35,9 @@ public class CheckEnemySpotted : Node
             if (GuardBehaviourTree.timePlayerVisible >= zone1Timer)
             {
                 _spotlight.color = Color.red;
+                GuardBehaviourTree.attackPlayer = true;
+                GuardBehaviourTree.playerSeen = true;
+                GuardBehaviourTree.playerVisible = true;
                 state = NodeState.SUCCESS;
                 return state;
             }
@@ -47,6 +49,9 @@ public class CheckEnemySpotted : Node
             if (GuardBehaviourTree.timePlayerVisible >= zone2Timer)
             {
                 _spotlight.color = Color.magenta;
+                GuardBehaviourTree.attackPlayer = true;
+                GuardBehaviourTree.playerSeen = true;
+                GuardBehaviourTree.playerVisible = true;
                 state = NodeState.SUCCESS;
                 return state;
             }
@@ -58,6 +63,9 @@ public class CheckEnemySpotted : Node
             if (GuardBehaviourTree.timePlayerVisible >= zone3Timer)
             {
                 _spotlight.color = Color.yellow;
+                GuardBehaviourTree.attackPlayer = false;
+                GuardBehaviourTree.playerSeen = true;
+                GuardBehaviourTree.playerVisible = true;
                 state = NodeState.SUCCESS;
                 return state;
             }
@@ -69,6 +77,9 @@ public class CheckEnemySpotted : Node
             if (GuardBehaviourTree.timePlayerVisible >= zone4Timer)
             {
                 _spotlight.color = Color.green;
+                GuardBehaviourTree.attackPlayer = false;
+                GuardBehaviourTree.playerSeen = true;
+                GuardBehaviourTree.playerVisible = true;
                 state = NodeState.SUCCESS;
                 return state;
             }
@@ -80,6 +91,9 @@ public class CheckEnemySpotted : Node
             if (GuardBehaviourTree.timePlayerVisible >= zone5Timer)
             {
                 _spotlight.color = Color.blue;
+                GuardBehaviourTree.attackPlayer = false;
+                GuardBehaviourTree.playerSeen = true;
+                GuardBehaviourTree.playerVisible = true;
                 state = NodeState.SUCCESS;
                 return state;
             }
@@ -89,6 +103,8 @@ public class CheckEnemySpotted : Node
         else if (GuardBehaviourTree.zone == GuardBehaviourTree.ZoneState.emptyZone)
         {
             _spotlight.color = initialSpotlightColour;
+            GuardBehaviourTree.attackPlayer = false;
+            GuardBehaviourTree.playerVisible = false;
             GuardBehaviourTree.timePlayerVisible = GuardBehaviourTree.timePlayerVisible - Time.deltaTime;    //[2]
 
             if (GuardBehaviourTree.timePlayerVisible <= 0)
@@ -103,9 +119,5 @@ public class CheckEnemySpotted : Node
 
         state = NodeState.RUNNING;
         return state;
-
     }
-
-
-
 }

@@ -1,13 +1,7 @@
 using BehaviorTree;
 using UnityEngine;
 
-
-/// <summary>
-/// ///////////////////// should be check enemy zone
-/// </summary>
-
-
-public class CheckEnemyVisible : Node
+public class CheckEnemyZone : Node
 {
     private Transform _transform;
     private Transform _player;
@@ -22,7 +16,7 @@ public class CheckEnemyVisible : Node
     float nearViewingDist = 15.0f;
 
 
-    public CheckEnemyVisible(Transform transform, Transform player, LayerMask viewMask)
+    public CheckEnemyZone(Transform transform, Transform player, LayerMask viewMask)
     { 
         _transform = transform;
         _player = player;
