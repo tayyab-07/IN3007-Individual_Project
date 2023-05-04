@@ -16,7 +16,7 @@ public class GuardChase : Node
     public override NodeState Evaluate()
     {
         _agent.SetDestination(_player.position);
-        state = NodeState.RUNNING; 
+        state = NodeState.SUCCESS; 
         return state;
     }
 

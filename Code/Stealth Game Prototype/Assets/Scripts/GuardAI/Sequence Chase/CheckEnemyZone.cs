@@ -6,6 +6,7 @@ public class CheckEnemyZone : Node
     private Transform _transform;
     private Transform _player;
     private LayerMask _viewMask;
+    private GuardBehaviourTree _guard;
 
     float angleA = 30;
     float angleB = 90;
@@ -16,11 +17,12 @@ public class CheckEnemyZone : Node
     float nearViewingDist = 15.0f;
 
 
-    public CheckEnemyZone(Transform transform, Transform player, LayerMask viewMask)
-    { 
+    public CheckEnemyZone(Transform transform, Transform player, LayerMask viewMask, GuardBehaviourTree guard)
+    {
         _transform = transform;
         _player = player;
         _viewMask = viewMask;
+        _guard = guard;
     }
 
     public override NodeState Evaluate()
@@ -40,17 +42,17 @@ public class CheckEnemyZone : Node
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone1;
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone1;
                 }
 
                 else if (playerGuardAngle < angleC / 2f)
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone2;
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone2;
                 }
 
                 else
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
+                    _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
                 }
             }
 
@@ -60,22 +62,22 @@ public class CheckEnemyZone : Node
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone2;
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone2;
                 }
 
                 else if (playerGuardAngle < angleB / 2f)
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone3;
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone3;
                 }
 
                 else if (playerGuardAngle < angleC / 2f)
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone4;
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone4;
                 }
 
                 else
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
+                    _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
                 }
             }
 
@@ -85,34 +87,34 @@ public class CheckEnemyZone : Node
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone3;
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone3;
                 }
 
                 else if (playerGuardAngle < angleB / 2f)
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone4;
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone4;
                 }
 
                 else if (playerGuardAngle < angleC / 2f)
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.zone5;
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone5;
                 }
 
                 else
                 {
-                    GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
+                    _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
                 }
             }
 
             else
             {
-                GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
+                _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
             }
         }
 
         else
         {
-            GuardBehaviourTree.zone = GuardBehaviourTree.ZoneState.emptyZone;
+            _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
         }
 
         state = NodeState.SUCCESS;

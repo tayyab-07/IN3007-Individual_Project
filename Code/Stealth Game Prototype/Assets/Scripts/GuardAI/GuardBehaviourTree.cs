@@ -2,29 +2,35 @@ using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.AI;
 
 public class GuardBehaviourTree : BehaviorTree.Tree
 {
-    public UnityEngine.Transform[] patrolPoints;
+    [Header("Patrol Points")]
+    public Transform[] patrolPoints;
 
+    [Header("Objects")]
     public LayerMask viewMask;
     public Transform player;
     public NavMeshAgent agent;
     public Light spotlight;
+    public GuardBehaviourTree guard;
 
-    public static bool attackPlayer = false;
-    public static bool playerSeen = false;
-    public static bool playerVisible = false;
+    [Header("Booleans")]
+    public bool attackPlayer = false;
+    public bool playerSeen = false;
 
-    public static bool conductAttack = false;
-    public static bool conductSearch = false;
+    public bool conductAttack = false;
+    public bool conductSearch = false;
 
-    public static bool search1 = false;
-    public static bool search2 = false;    
+    public bool search1 = false;
+    public bool search2 = false;
 
-    public static float timePlayerVisible;
+    [Header("Timer")]
+    public float timePlayerVisible;
 
-    public static ZoneState zone;
+    [Header("Zones")]
+    public ZoneState zone;
     public enum ZoneState
     {
         emptyZone,
@@ -37,27 +43,31 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
     protected override Node SetupTree()
     {
-
         Node root = new Selector(new List<Node>
-        {   
-            new Sequence (new List<Node>
-            { 
-                new CheckEnemyInAttackRange(),
-                new GuardAttack(transform),
-            }),
+        {
+            //new GuardOrganise(guard),
 
             new Sequence (new List<Node>
             { 
-                new CheckEnemyZone(transform, player, viewMask),
-                new CheckEnemySpotted(spotlight),
-                new GuardChase(player, agent),
-            }),
+                new CheckEnemyZone(transform, player, viewMask, guard),
 
-            new GuardOrganise(),
+                new CheckEnemySpotted(spotlight, guard),
+
+                new Selector(new List<Node>
+                { 
+                    new Sequence(new List<Node>
+                    {
+                        new CheckEnemyInAttackRange(guard),
+                        new GuardAttack(spotlight),
+                    }),
+
+                    new GuardChase(player, agent),
+                }),
+            }),
 
             new GuardPatrol(transform, patrolPoints, agent),
 
-        }) ;
+        });
 
         return root;
     }

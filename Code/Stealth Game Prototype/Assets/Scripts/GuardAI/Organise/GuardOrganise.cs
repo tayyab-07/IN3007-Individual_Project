@@ -2,24 +2,26 @@ using BehaviorTree;
 
 public class GuardOrganise : Node
 {
-    public GuardOrganise() 
-    { 
+    private GuardBehaviourTree _guard;
 
+    public GuardOrganise(GuardBehaviourTree guard) 
+    {
+        _guard = guard;
     }
 
     public override NodeState Evaluate()
     {
 
-        if (GuardBehaviourTree.playerVisible == true)
+        if (_guard.attackPlayer == true)
         {
-            GuardBehaviourTree.conductAttack = true;
+            _guard.conductAttack = true;
             state = NodeState.SUCCESS; 
             return state;
         }
 
-        else if (GuardBehaviourTree.playerVisible == false && GuardBehaviourTree.playerSeen == true)
+        else if (_guard.zone == GuardBehaviourTree.ZoneState.emptyZone && _guard.playerSeen == true)
         {
-            GuardBehaviourTree.conductAttack = true;
+            _guard.conductSearch = true;
             state = NodeState.SUCCESS;
             return state;
         }

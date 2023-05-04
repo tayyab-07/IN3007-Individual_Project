@@ -3,17 +3,17 @@ using BehaviorTree;
 
 public class CheckEnemyInAttackRange : Node
 {
+    private GuardBehaviourTree _guard;
 
-    public CheckEnemyInAttackRange()
+    public CheckEnemyInAttackRange(GuardBehaviourTree guard)
     {
-        
+        _guard = guard;
     }
 
     public override NodeState Evaluate()
     {
-        if (GuardBehaviourTree.attackPlayer == true)
+        if (_guard.attackPlayer == true)
         {
-            GuardBehaviourTree.attackPlayer = false;
             state = NodeState.SUCCESS;
             return state;
         }

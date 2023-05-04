@@ -8,9 +8,7 @@ public class GuardPatrol : Node
     private Transform[] _patrolPoints;
     private NavMeshAgent _agent;
 
-    [Header("Patrol")]
-    public Transform[] patrolPoints;
-    public int currentPatrolPoint;
+    private int currentPatrolPoint;
     private float patrolStopDuration = 2.5f;
     private float patrolStopTimer = 0.0f;
     private bool stopped = false;

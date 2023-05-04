@@ -297,11 +297,15 @@ MonoBehaviour:
   player: {fileID: 2057802920}
   agent: {fileID: 78096659}
   spotlight: {fileID: 1537665229}
+  guard: {fileID: 78096660}
+  attackPlayer: 0
   playerSeen: 0
-  attak: 0
+  conductAttack: 0
   conductSearch: 0
   search1: 0
   search2: 0
+  timePlayerVisible: 0
+  zone: 0
 --- !u!1 &102279773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2631,62 +2635,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1140485249}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1162758989
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1162758991}
-  - component: {fileID: 1162758990}
-  m_Layer: 0
-  m_Name: attackSearch
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1162758990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1162758989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 764cdef93aa6d6c43bf6dc7140f6fc67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  guards:
-  - {fileID: 78096660}
-  loc0: {x: 18, y: 0, z: 18}
-  loc1: {x: 0, y: 0, z: 22}
-  loc2: {x: -22, y: 0, z: 22}
-  loc3: {x: -22, y: 0, z: 0}
-  loc4: {x: -22, y: 0, z: -22}
-  loc5: {x: 0, y: 0, z: -22}
-  loc6: {x: 22, y: 0, z: -22}
-  loc7: {x: -22, y: 0, z: 0}
-  loc8: {x: 8, y: 0, z: 3.5}
-  loc9: {x: -8.5, y: 0, z: 17}
-  searchTimer: 0
---- !u!4 &1162758991
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1162758989}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.2420427, y: 48.182224, z: -17.679073}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1193443659
 GameObject:
   m_ObjectHideFlags: 0
@@ -2977,15 +2925,15 @@ GameObject:
   - component: {fileID: 1441955774}
   - component: {fileID: 1441955773}
   - component: {fileID: 1441955772}
-  - component: {fileID: 1441955771}
   - component: {fileID: 1441955770}
+  - component: {fileID: 1441955771}
   m_Layer: 8
   m_Name: Guard (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1441955769
 Transform:
   m_ObjectHideFlags: 0
@@ -3032,28 +2980,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1441955768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7827f77a416c3ab4dbbdc6d1d79f325e, type: 3}
+  m_Script: {fileID: 11500000, guid: c6f33a646a6f8964c977757f6978b79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spotlight: {fileID: 578057780}
-  viewMask:
-    serializedVersion: 2
-    m_Bits: 64
-  agent: {fileID: 1441955770}
-  timePlayerVisible: 0
-  zone: 0
-  search1: 0
-  search2: 0
-  playerSeen: 0
-  attackPlayer: 0
-  initialGuardLocation: {x: 0, y: 0, z: 0}
   patrolPoints:
   - {fileID: 1405055654}
   - {fileID: 618329789}
   - {fileID: 994797772}
   - {fileID: 1024554606}
   - {fileID: 1908749591}
-  currentPatrolPoint: 0
+  viewMask:
+    serializedVersion: 2
+    m_Bits: 64
+  player: {fileID: 2057802920}
+  agent: {fileID: 1441955770}
+  spotlight: {fileID: 578057780}
+  guard: {fileID: 1441955771}
+  attackPlayer: 0
+  playerSeen: 0
+  conductAttack: 0
+  conductSearch: 0
+  search1: 0
+  search2: 0
+  timePlayerVisible: 0
+  zone: 0
 --- !u!136 &1441955772
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3409,10 +3359,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1556192956}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5daa9dfa3011974293250ab7f10b5e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 764cdef93aa6d6c43bf6dc7140f6fc67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   guards:
+  - {fileID: 78096660}
   - {fileID: 1586754857}
   - {fileID: 1964906707}
   - {fileID: 1441955771}
@@ -3439,15 +3390,15 @@ GameObject:
   - component: {fileID: 1586754860}
   - component: {fileID: 1586754859}
   - component: {fileID: 1586754858}
-  - component: {fileID: 1586754857}
   - component: {fileID: 1586754856}
+  - component: {fileID: 1586754857}
   m_Layer: 8
   m_Name: Guard (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1586754855
 Transform:
   m_ObjectHideFlags: 0
@@ -3494,28 +3445,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1586754854}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7827f77a416c3ab4dbbdc6d1d79f325e, type: 3}
+  m_Script: {fileID: 11500000, guid: c6f33a646a6f8964c977757f6978b79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spotlight: {fileID: 1432535106}
-  viewMask:
-    serializedVersion: 2
-    m_Bits: 64
-  agent: {fileID: 1586754856}
-  timePlayerVisible: 0
-  zone: 0
-  search1: 0
-  search2: 0
-  playerSeen: 0
-  attackPlayer: 0
-  initialGuardLocation: {x: 0, y: 0, z: 0}
   patrolPoints:
   - {fileID: 105149537}
   - {fileID: 1493004100}
   - {fileID: 472653624}
   - {fileID: 438504566}
   - {fileID: 1017079680}
-  currentPatrolPoint: 0
+  viewMask:
+    serializedVersion: 2
+    m_Bits: 64
+  player: {fileID: 2057802920}
+  agent: {fileID: 1586754856}
+  spotlight: {fileID: 1432535106}
+  guard: {fileID: 1586754857}
+  attackPlayer: 0
+  playerSeen: 0
+  conductAttack: 0
+  conductSearch: 0
+  search1: 0
+  search2: 0
+  timePlayerVisible: 0
+  zone: 0
 --- !u!136 &1586754858
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4198,15 +4151,15 @@ GameObject:
   - component: {fileID: 1964906710}
   - component: {fileID: 1964906709}
   - component: {fileID: 1964906708}
-  - component: {fileID: 1964906707}
   - component: {fileID: 1964906706}
+  - component: {fileID: 1964906707}
   m_Layer: 8
   m_Name: Guard (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1964906705
 Transform:
   m_ObjectHideFlags: 0
@@ -4253,21 +4206,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1964906704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7827f77a416c3ab4dbbdc6d1d79f325e, type: 3}
+  m_Script: {fileID: 11500000, guid: c6f33a646a6f8964c977757f6978b79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spotlight: {fileID: 131822573}
-  viewMask:
-    serializedVersion: 2
-    m_Bits: 64
-  agent: {fileID: 1964906706}
-  timePlayerVisible: 0
-  zone: 0
-  search1: 0
-  search2: 0
-  playerSeen: 0
-  attackPlayer: 0
-  initialGuardLocation: {x: 0, y: 0, z: 0}
   patrolPoints:
   - {fileID: 562991166}
   - {fileID: 639240395}
@@ -4275,7 +4216,21 @@ MonoBehaviour:
   - {fileID: 1658643007}
   - {fileID: 1493429686}
   - {fileID: 1232167802}
-  currentPatrolPoint: 0
+  viewMask:
+    serializedVersion: 2
+    m_Bits: 64
+  player: {fileID: 2057802920}
+  agent: {fileID: 1964906706}
+  spotlight: {fileID: 131822573}
+  guard: {fileID: 1964906707}
+  attackPlayer: 0
+  playerSeen: 0
+  conductAttack: 0
+  conductSearch: 0
+  search1: 0
+  search2: 0
+  timePlayerVisible: 0
+  zone: 0
 --- !u!136 &1964906708
 CapsuleCollider:
   m_ObjectHideFlags: 0

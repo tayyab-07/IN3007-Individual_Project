@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GuardAttackSearch : MonoBehaviour
+public class BTGuardGroup : MonoBehaviour
 {
     Transform player;
     System.Random rnd = new System.Random();
@@ -34,14 +34,13 @@ public class GuardAttackSearch : MonoBehaviour
     {
         for (int i = 0; i < guards.Length; i++)
         {
-            if (GuardBehaviourTree.conductAttack == true)
+            if (guards[i].conductSearch == true)
             {
                 ConductSearch();
             }
 
-            else if (guards[i].gameObject.GetComponentInParent<GuardBehaviourTree>(GuardBehaviourTree.conductAttack) == true)
+            else if (guards[i].conductAttack == true)
             {
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ConductAttack();
             }
         }
@@ -79,13 +78,19 @@ public class GuardAttackSearch : MonoBehaviour
 
     void ConductAttack()
     {
-
         for (int i = 0; i < guards.Length; i++)
         {
             guards[i].search1 = false;
             guards[i].search2 = false;
             guards[i].agent.SetDestination(player.position);
         }
+
+        for (int j = 0; j < guards.Length; j++)
+        { 
+            
+        }
+        
+        ConductSearch();
     }
 
     void GuardSearch(GuardBehaviourTree guard)
@@ -139,10 +144,11 @@ public class GuardAttackSearch : MonoBehaviour
             guards[i].search1 = false;
             guards[i].search2 = false;
 
-            //guards[i].conductAttack = false;
-            //guards[i].conductSearch = false;
+            guards[i].conductAttack = false;
+            guards[i].conductSearch = false;
 
             guards[i].playerSeen = false;
+            guards[i].attackPlayer = false;
         }
     }
 
