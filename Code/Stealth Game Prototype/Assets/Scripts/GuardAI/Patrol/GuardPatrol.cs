@@ -7,17 +7,19 @@ public class GuardPatrol : Node
     private Transform _guardTransform;
     private Transform[] _patrolPoints;
     private NavMeshAgent _agent;
+    private GuardBehaviourTree _guard;
 
     private int currentPatrolPoint;
     private float patrolStopDuration = 2.5f;
     private float patrolStopTimer = 0.0f;
     private bool stopped = false;
 
-    public GuardPatrol(Transform guardTransform, Transform[] patrolPoints, NavMeshAgent agent)
+    public GuardPatrol(Transform guardTransform, Transform[] patrolPoints, NavMeshAgent agent, GuardBehaviourTree guard)
     { 
         _guardTransform = guardTransform;
         _patrolPoints = patrolPoints;
         _agent = agent;
+        _guard = guard;
     }
 
     public override NodeState Evaluate()
@@ -26,7 +28,17 @@ public class GuardPatrol : Node
 
         Transform wp = _patrolPoints[currentPatrolPoint];
 
-        // if the guard is waiting along thier patrol path, start a timer and rotate the guard to face the next waypoint
+        // since organise attack returns false to allow for th rest of the tree to be run in order to chase and actually attack the guard
+        // the tree needs to make sure that the guard isnt patrolling either
+        // since there is no class used to check whether a guard should bve patrolling or not
+        // there is some simple validation which will return failure if the group are currently organising their attack
+        if (_guard.organiseAttack == true)
+        {
+            state = NodeState.FAILURE;
+            return state;
+        }
+
+        // if the guard is waiting along thier patrol path, start a timer and wait until they have waited the entire duration before moving on
         if (stopped == true)
         {
             patrolStopTimer = patrolStopTimer + Time.deltaTime;
@@ -52,6 +64,9 @@ public class GuardPatrol : Node
             }
         }
 
+        // return running constantly 
+        // as its at the end of the tree, it can afford to do this as its not stopping anything else from running.
+        // success or running here would work just the same
         state = NodeState.RUNNING;
         return state;
     }

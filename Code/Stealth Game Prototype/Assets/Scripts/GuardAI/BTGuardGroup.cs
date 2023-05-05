@@ -34,42 +34,42 @@ public class BTGuardGroup : MonoBehaviour
     {
         for (int i = 0; i < guards.Length; i++)
         {
-            if (guards[i].conductSearch == true)
+            if (guards[i].playerSeen == true && guards[i].playerVisible == false)
             {
+                for (int j = 0; j < guards.Length; j++)
+                {
+                    guards[j].organiseSearch = true;
+                }
                 ConductSearch();
-            }
-
-            else if (guards[i].conductAttack == true)
-            {
-                ConductAttack();
+                break;
             }
         }
+
+        ConductAttack();
     }
 
     void ConductSearch()
     {
-        // Method to organise the guards to go search
-
         // Search for 30 seconds then reset to start location
         searchTimer = searchTimer + Time.deltaTime;
 
         // Set all guards to search one place until 15sec and another until 30sec
         for (int i = 0; i < guards.Length; i++)
         {
-            if (searchTimer > 2 && searchTimer < 15 && guards[i].search1 == false)
+            if (searchTimer > 10 && searchTimer < 25 && guards[i].search1 == false)
             {
                 GuardSearch(guards[i]);
                 guards[i].search1 = true;
             }
 
-            if (searchTimer > 15 && searchTimer < 30 && guards[i].search2 == false)
+            if (searchTimer > 25 && searchTimer < 40 && guards[i].search2 == false)
             {
                 GuardSearch(guards[i]);
                 guards[i].search2 = true;
             }
 
-            // After 30 sec, tell guards to go back to starting location
-            if (searchTimer > 30)
+            // After 40 sec, tell guards to go back to starting location
+            if (searchTimer > 40)
             {
                 ResetSearch();
             }
@@ -78,19 +78,35 @@ public class BTGuardGroup : MonoBehaviour
 
     void ConductAttack()
     {
+        int guardsNotSeeingPlayer = 0;
+
         for (int i = 0; i < guards.Length; i++)
         {
-            guards[i].search1 = false;
-            guards[i].search2 = false;
-            guards[i].agent.SetDestination(player.position);
-        }
+            if (guards[i].playerVisible == true)
+            {
+                searchTimer = 0;
+                for (int j = 0; j < guards.Length; j++)
+                {
+                    guards[j].search1 = false;
+                    guards[j].search2 = false;
+                    guards[j].organiseAttack = true;
+                }
+            }
 
-        for (int j = 0; j < guards.Length; j++)
-        { 
-            
+            else
+            {
+                guardsNotSeeingPlayer = guardsNotSeeingPlayer + 1;
+            }
+
+            if (guardsNotSeeingPlayer == 4)
+            {
+                for (int j = 0; j < guards.Length; j++)
+                {
+                    guards[j].organiseAttack = false;
+                }
+                guardsNotSeeingPlayer = 0;
+            }
         }
-        
-        ConductSearch();
     }
 
     void GuardSearch(GuardBehaviourTree guard)
@@ -136,19 +152,13 @@ public class BTGuardGroup : MonoBehaviour
 
     void ResetSearch()
     {
-        // Method to reset the searchtimer and reset the guards search bools
-
         searchTimer = 0;
         for (int i = 0; i < guards.Length; i++)
         {
+            guards[i].organiseSearch = false;
+            guards[i].playerSeen = false;
             guards[i].search1 = false;
             guards[i].search2 = false;
-
-            guards[i].conductAttack = false;
-            guards[i].conductSearch = false;
-
-            guards[i].playerSeen = false;
-            guards[i].attackPlayer = false;
         }
     }
 

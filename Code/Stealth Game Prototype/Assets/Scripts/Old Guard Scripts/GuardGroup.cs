@@ -34,7 +34,7 @@ public class GuardGroup : MonoBehaviour
     {
         // Check to see if any of the guards have seen the player
         // If they have, start the search, regardless if the others havent seen the player
-        // It makes it look like the guuards have communicated and are working together
+        // It makes it look like the guards have communicated and are working together
         for (int i = 0; i < guards.Length; i++)
         {
             if (guards[i].zone == Guard.ZoneState.emptyZone && guards[i].playerSeen == true)

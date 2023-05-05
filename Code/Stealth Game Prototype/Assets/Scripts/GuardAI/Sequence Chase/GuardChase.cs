@@ -15,6 +15,9 @@ public class GuardChase : Node
 
     public override NodeState Evaluate()
     {
+        // chases after the player 
+        // this class is called if the player is visible but not close enough to be within attack range
+
         _agent.SetDestination(_player.position);
         state = NodeState.SUCCESS; 
         return state;

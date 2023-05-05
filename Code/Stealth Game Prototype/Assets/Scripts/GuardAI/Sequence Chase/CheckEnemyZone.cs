@@ -16,7 +16,6 @@ public class CheckEnemyZone : Node
     float mediumViewingDist = 25.0f;
     float nearViewingDist = 15.0f;
 
-
     public CheckEnemyZone(Transform transform, Transform player, LayerMask viewMask, GuardBehaviourTree guard)
     {
         _transform = transform;
@@ -117,6 +116,7 @@ public class CheckEnemyZone : Node
             _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
         }
 
+        // Return success regardless of the outcome as outcomes can only be zones 1 through 5 and empty zone which are all necesary for the next leaf
         state = NodeState.SUCCESS;
         return state;
     }

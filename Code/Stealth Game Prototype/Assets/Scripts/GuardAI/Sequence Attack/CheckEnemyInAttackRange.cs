@@ -12,6 +12,8 @@ public class CheckEnemyInAttackRange : Node
 
     public override NodeState Evaluate()
     {
+        // return success if the guard is close enough to the player to be within attack range
+
         if (_guard.attackPlayer == true)
         {
             state = NodeState.SUCCESS;

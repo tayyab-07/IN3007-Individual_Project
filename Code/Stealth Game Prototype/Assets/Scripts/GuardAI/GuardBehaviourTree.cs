@@ -2,7 +2,6 @@ using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Experimental.AI;
 
 public class GuardBehaviourTree : BehaviorTree.Tree
 {
@@ -19,15 +18,17 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     [Header("Booleans")]
     public bool attackPlayer = false;
     public bool playerSeen = false;
-
-    public bool conductAttack = false;
-    public bool conductSearch = false;
+    public bool playerVisible = false;
 
     public bool search1 = false;
     public bool search2 = false;
 
     [Header("Timer")]
     public float timePlayerVisible;
+
+    [Header("Organise")]
+    public bool organiseAttack;
+    public bool organiseSearch;
 
     [Header("Zones")]
     public ZoneState zone;
@@ -43,9 +44,15 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
     protected override Node SetupTree()
     {
+        // Structure for guard behaviour tree
+
         Node root = new Selector(new List<Node>
         {
-            //new GuardOrganise(guard),
+            new Sequence (new List<Node>
+            {
+                new CheckAttack(guard),
+                new GroupAttack(player, guard, agent),
+            }),
 
             new Sequence (new List<Node>
             { 
@@ -64,8 +71,14 @@ public class GuardBehaviourTree : BehaviorTree.Tree
                     new GuardChase(player, agent),
                 }),
             }),
+            
+            new Sequence (new List<Node>
+            { 
+                new CheckSearch(guard),
+                new GroupSearch(),
+            }),
 
-            new GuardPatrol(transform, patrolPoints, agent),
+            new GuardPatrol(transform, patrolPoints, agent, guard),
 
         });
 
