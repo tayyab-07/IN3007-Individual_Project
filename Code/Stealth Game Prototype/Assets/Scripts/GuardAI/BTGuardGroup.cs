@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class BTGuardGroup : MonoBehaviour
 {
-    Transform player;
     System.Random rnd = new System.Random();
 
     [Header("Guards")]
@@ -26,7 +25,7 @@ public class BTGuardGroup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+
     }
 
     // Update is called once per frame
