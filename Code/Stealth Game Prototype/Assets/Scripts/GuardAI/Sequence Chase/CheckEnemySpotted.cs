@@ -5,6 +5,8 @@ public class CheckEnemySpotted : Node
 {
     private Light _spotlight;
     private GuardBehaviourTree _guard;
+    private AlertedSprite _alertedSprite;
+    private SearchingSprite _searchingSprite;
 
     float zone1Timer = 1.0f;
     float zone2Timer = 1.5f;
@@ -12,10 +14,12 @@ public class CheckEnemySpotted : Node
     float zone4Timer = 3.0f;
     float zone5Timer = 5.0f;
 
-    public CheckEnemySpotted(Light spotlight, GuardBehaviourTree guard)
+    public CheckEnemySpotted(Light spotlight, GuardBehaviourTree guard, AlertedSprite alertedSprite, SearchingSprite searchingSprite)
     {
         _spotlight = spotlight;
         _guard = guard;
+        _alertedSprite = alertedSprite;
+        _searchingSprite = searchingSprite;
     }
 
     public override NodeState Evaluate()
@@ -34,6 +38,8 @@ public class CheckEnemySpotted : Node
             _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime; 
             if (_guard.timePlayerVisible >= zone1Timer)
             {
+                _alertedSprite.displayAlerted();
+                _searchingSprite.disableSearching();
                 _spotlight.color = Color.red;
                 _guard.attackPlayer = true;
                 _guard.playerSeen = true;
@@ -46,6 +52,8 @@ public class CheckEnemySpotted : Node
             _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
             if (_guard.timePlayerVisible >= zone2Timer)
             {
+                _alertedSprite.displayAlerted();
+                _searchingSprite.disableSearching();
                 _spotlight.color = Color.magenta;
                 _guard.attackPlayer = false;
                 _guard.playerSeen = true;
@@ -58,6 +66,8 @@ public class CheckEnemySpotted : Node
             _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
             if (_guard.timePlayerVisible >= zone3Timer)
             {
+                _alertedSprite.displayAlerted();
+                _searchingSprite.disableSearching();
                 _spotlight.color = Color.yellow;
                 _guard.attackPlayer = false;
                 _guard.playerSeen = true;
@@ -70,6 +80,8 @@ public class CheckEnemySpotted : Node
             _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
             if (_guard.timePlayerVisible >= zone4Timer)
             {
+                _alertedSprite.displayAlerted();
+                _searchingSprite.disableSearching();
                 _spotlight.color = Color.green;
                 _guard.attackPlayer = false;
                 _guard.playerSeen = true;
@@ -82,6 +94,8 @@ public class CheckEnemySpotted : Node
             _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
             if (_guard.timePlayerVisible >= zone5Timer)
             {
+                _alertedSprite.displayAlerted();
+                _searchingSprite.disableSearching();
                 _spotlight.color = Color.blue;
                 _guard.attackPlayer = false;
                 _guard.playerSeen = true;
@@ -92,6 +106,8 @@ public class CheckEnemySpotted : Node
         // if player is not in a zone, decrement the timer
         else if (_guard.zone == GuardBehaviourTree.ZoneState.emptyZone)
         {
+            _alertedSprite.disableAlerted();
+            _searchingSprite.displaySearching();
             _spotlight.color = Color.white;
             _guard.attackPlayer = false;
             _guard.playerVisible = false;
@@ -100,6 +116,7 @@ public class CheckEnemySpotted : Node
             // if the player is no longer visible and timer ticks down to 0, return false so that the guard doesnt chase or attack
             if (_guard.timePlayerVisible <= 0)
             {
+                _searchingSprite.disableSearching();
                 state = NodeState.FAILURE;
                 return state;
             }

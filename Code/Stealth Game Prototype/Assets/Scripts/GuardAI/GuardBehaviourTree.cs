@@ -14,6 +14,8 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     public NavMeshAgent agent;
     public Light spotlight;
     public GuardBehaviourTree guard;
+    public AlertedSprite alertedSprite;
+    public SearchingSprite searchingSprite;
 
     [Header("Booleans")]
     public bool attackPlayer = false;
@@ -58,7 +60,7 @@ public class GuardBehaviourTree : BehaviorTree.Tree
             { 
                 new CheckEnemyZone(transform, player, viewMask, guard),
 
-                new CheckEnemySpotted(spotlight, guard),
+                new CheckEnemySpotted(spotlight, guard, alertedSprite, searchingSprite),
 
                 new Selector(new List<Node>
                 { 
@@ -75,10 +77,10 @@ public class GuardBehaviourTree : BehaviorTree.Tree
             new Sequence (new List<Node>
             { 
                 new CheckSearch(guard),
-                new GroupSearch(),
+                new GroupSearch(alertedSprite, searchingSprite),
             }),
 
-            new GuardPatrol(transform, patrolPoints, agent, guard),
+            new GuardPatrol(transform, patrolPoints, agent, guard, alertedSprite, searchingSprite),
 
         });
 

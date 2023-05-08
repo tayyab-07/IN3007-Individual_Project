@@ -8,22 +8,29 @@ public class GuardPatrol : Node
     private Transform[] _patrolPoints;
     private NavMeshAgent _agent;
     private GuardBehaviourTree _guard;
+    private AlertedSprite _alertedSprite;
+    private SearchingSprite _searchingSprite;
 
     private int currentPatrolPoint;
     private float patrolStopDuration = 2.5f;
     private float patrolStopTimer = 0.0f;
     private bool stopped = false;
 
-    public GuardPatrol(Transform guardTransform, Transform[] patrolPoints, NavMeshAgent agent, GuardBehaviourTree guard)
+    public GuardPatrol(Transform guardTransform, Transform[] patrolPoints, NavMeshAgent agent, GuardBehaviourTree guard, AlertedSprite alertedSprite, SearchingSprite searchingSprite)
     { 
         _guardTransform = guardTransform;
         _patrolPoints = patrolPoints;
         _agent = agent;
         _guard = guard;
+        _alertedSprite = alertedSprite;
+        _searchingSprite = searchingSprite;
     }
 
     public override NodeState Evaluate()
     {
+        _alertedSprite.disableAlerted();
+        _searchingSprite.disableSearching();
+
         // Method to set the patrol path of the guard
 
         Transform wp = _patrolPoints[currentPatrolPoint];
