@@ -16,6 +16,7 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     public GuardBehaviourTree guard;
     public AlertedSprite alertedSprite;
     public SearchingSprite searchingSprite;
+    public DetectionBarSprite detectionBarSprite;
 
     [Header("Booleans")]
     public bool attackPlayer = false;
@@ -60,7 +61,7 @@ public class GuardBehaviourTree : BehaviorTree.Tree
             { 
                 new CheckEnemyZone(transform, player, viewMask, guard),
 
-                new CheckEnemySpotted(spotlight, guard, alertedSprite, searchingSprite),
+                new CheckEnemySpotted(spotlight, guard, alertedSprite, searchingSprite, detectionBarSprite),
 
                 new Selector(new List<Node>
                 { 
