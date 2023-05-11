@@ -18,8 +18,10 @@ public class GroupSearch : Node
         // in order to do this the guard cant be chasing or patrolling etc...
         // therefore this simple class is used to ensure the guard is not doing anything else while searching
 
-        _alertedSprite.disableAlerted();
-        _searchingSprite.displaySearching();
+        //disable the alerted UI element and enable the sp[otted UI element for Searching
+        _alertedSprite.DisableAlerted();
+        _searchingSprite.DisplaySearching();
+
         state = NodeState.SUCCESS; 
         return state;
     }

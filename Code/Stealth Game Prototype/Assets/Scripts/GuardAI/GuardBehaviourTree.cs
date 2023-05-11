@@ -14,6 +14,8 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     public NavMeshAgent agent;
     public Light spotlight;
     public GuardBehaviourTree guard;
+
+    [Header("Sprites")]
     public AlertedSprite alertedSprite;
     public SearchingSprite searchingSprite;
     public DetectionBarSprite detectionBarSprite;

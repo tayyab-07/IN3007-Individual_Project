@@ -3,14 +3,16 @@ using UnityEngine.UI;
 
 public class SearchingSprite : MonoBehaviour
 {
+    // class that enables or diables visibility of the Searching UI element.
+
     public Image image;
 
-    public void displaySearching()
+    public void DisplaySearching()
     {
         image.enabled = true;
     }
 
-    public void disableSearching()
+    public void DisableSearching()
     {
         image.enabled = false;
     }

@@ -28,8 +28,9 @@ public class GuardPatrol : Node
 
     public override NodeState Evaluate()
     {
-        _alertedSprite.disableAlerted();
-        _searchingSprite.disableSearching();
+        // disable UI entirely if the guard is patrolling
+        _alertedSprite.DisableAlerted();
+        _searchingSprite.DisableSearching();
 
         // Method to set the patrol path of the guard
 
