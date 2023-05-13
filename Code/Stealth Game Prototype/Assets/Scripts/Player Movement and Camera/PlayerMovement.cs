@@ -106,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
             // jump
             Jump();
 
-            // cooldwon before resetting jump ability
+            // cooldown before resetting jump ability
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 

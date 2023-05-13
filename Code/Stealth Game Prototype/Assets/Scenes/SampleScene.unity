@@ -7088,6 +7088,7 @@ GameObject:
   - component: {fileID: 2057802920}
   - component: {fileID: 2057802921}
   - component: {fileID: 2057802922}
+  - component: {fileID: 2057802923}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -7157,6 +7158,23 @@ MonoBehaviour:
     m_Bits: 8
   orientation: {fileID: 1193443660}
   state: 0
+--- !u!114 &2057802923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057802919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd7fa3c021199e842b171ee4deae17d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  throwForce: 2
+  throwCooldown: 5
+  grenadePrefab: {fileID: 6162478847142467484, guid: fa3c24e79d868a04d9d8be8393c79204, type: 3}
+  Orienatation: {fileID: 1193443660}
+  grenadekey: 103
 --- !u!1 &2127558971
 GameObject:
   m_ObjectHideFlags: 0
