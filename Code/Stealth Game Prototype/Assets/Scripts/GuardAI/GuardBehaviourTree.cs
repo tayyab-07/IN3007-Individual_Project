@@ -9,11 +9,13 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     public Transform[] patrolPoints;
 
     [Header("Objects")]
-    public LayerMask viewMask;
+    public LayerMask obstacleMask;
+    public LayerMask smokeMask;
     public Transform player;
     public NavMeshAgent agent;
     public Light spotlight;
     public GuardBehaviourTree guard;
+    public Transform smoke;
 
     [Header("Sprites")]
     public AlertedSprite alertedSprite;
@@ -27,6 +29,9 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
     public bool search1 = false;
     public bool search2 = false;
+
+    public bool smokeVisible = false;
+    public bool smokeSeen = false;
 
     [Header("Timer")]
     public float timePlayerVisible;
@@ -47,12 +52,24 @@ public class GuardBehaviourTree : BehaviorTree.Tree
         zone5
     }
 
+    public void Start()
+    {
+        smoke = GameObject.FindGameObjectWithTag("Smoke").transform;
+    }
+
     protected override Node SetupTree()
     {
         // Structure for guard behaviour tree
 
         Node root = new Selector(new List<Node>
         {
+
+            new Sequence (new List<Node>
+            { 
+                new CheckSmoke(transform, agent, smoke, obstacleMask, guard),
+                new GuardSmokeResponse(guard),
+            }),
+
             new Sequence (new List<Node>
             {
                 new CheckAttack(guard),
@@ -61,7 +78,7 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
             new Sequence (new List<Node>
             { 
-                new CheckEnemyZone(transform, player, viewMask, guard),
+                new CheckEnemyZone(transform, player, obstacleMask, smokeMask, guard),
 
                 new CheckEnemySpotted(spotlight, guard, alertedSprite, searchingSprite, detectionBarSprite),
 

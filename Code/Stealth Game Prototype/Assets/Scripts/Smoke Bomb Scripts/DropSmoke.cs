@@ -38,7 +38,7 @@ public class DropSmoke : MonoBehaviour
     // throw grenade in direction of player orientation object. Found under Player in hierachy
     void ThrowGrenade()
     { 
-        offset =(Orienatation.forward * 1.5f);
+        offset = (Orienatation.forward * 1.5f);
         GameObject grenade = Instantiate(grenadePrefab, transform.position + offset, Orienatation.rotation);
         Rigidbody rb = grenade.GetComponent<Rigidbody>();
         rb.AddForce(Orienatation.forward * throwForce, ForceMode.VelocityChange);

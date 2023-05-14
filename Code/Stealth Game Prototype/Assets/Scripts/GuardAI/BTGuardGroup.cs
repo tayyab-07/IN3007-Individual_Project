@@ -42,6 +42,28 @@ public class BTGuardGroup : MonoBehaviour
                 ConductSearch();
                 break;
             }
+
+            if (guards[i].smokeSeen == true && guards[i].smokeVisible == false)
+            {
+                for (int j = 0; j < guards.Length; j++)
+                {
+                    guards[j].organiseSearch = true;
+                }
+                ConductSearch();
+                break;
+            }
+
+            if (guards[i].smokeVisible == true)
+            {
+
+                for (int j = 0; j < guards.Length; j++)
+                {
+                    if (guards[i].smokeVisible == false)
+                    {
+                        guards[i].agent.SetDestination(guards[i].smoke.position);
+                    }
+                }
+            }
         }
 
         ConductAttack();
@@ -156,6 +178,7 @@ public class BTGuardGroup : MonoBehaviour
         {
             guards[i].organiseSearch = false;
             guards[i].playerSeen = false;
+            guards[i].smokeSeen = false;
             guards[i].search1 = false;
             guards[i].search2 = false;
         }

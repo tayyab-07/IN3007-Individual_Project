@@ -19,7 +19,7 @@ public class DestroySmoke : MonoBehaviour
     {
         destroyTimer += Time.deltaTime;
 
-        if (destroyTimer > 15)
+        if (destroyTimer > 12.5f)
         {
             Destroy(gameObject);
         }
