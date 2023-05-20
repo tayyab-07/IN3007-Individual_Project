@@ -9,6 +9,9 @@ using UnityEngine.AI;
 // there are some bits still kept from the sources above.
 // i will use [1] and [2] at the end of the lines that were NOT written by me
 
+// This file is no longer used in the code
+// The classes in the new Guard Behaviour tree were largely based on the methods from this class. Making this class obsolete.
+
 public class Guard : MonoBehaviour
 {
     public Light spotlight;

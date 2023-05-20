@@ -3948,6 +3948,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3935526174741133413, guid: bcea9f916f1c69c48b766c71d9296a24, type: 3}
+      propertyPath: obstacleMask.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935526174741133413, guid: bcea9f916f1c69c48b766c71d9296a24, type: 3}
       propertyPath: patrolPoints.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -4267,14 +4271,10 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  smokeMask:
-    serializedVersion: 2
-    m_Bits: 512
   player: {fileID: 2057802920}
   agent: {fileID: 1441955770}
   spotlight: {fileID: 578057780}
   guard: {fileID: 1441955771}
-  smoke: {fileID: 0}
   alertedSprite: {fileID: 1786791830}
   searchingSprite: {fileID: 25620857}
   detectionBarSprite: {fileID: 2041293312}
@@ -4283,8 +4283,6 @@ MonoBehaviour:
   playerVisible: 0
   search1: 0
   search2: 0
-  smokeVisible: 0
-  smokeSeen: 0
   timePlayerVisible: 0
   organiseAttack: 0
   organiseSearch: 0
@@ -4903,14 +4901,10 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  smokeMask:
-    serializedVersion: 2
-    m_Bits: 512
   player: {fileID: 2057802920}
   agent: {fileID: 1586754856}
   spotlight: {fileID: 1432535106}
   guard: {fileID: 1586754857}
-  smoke: {fileID: 0}
   alertedSprite: {fileID: 617920717}
   searchingSprite: {fileID: 144847242}
   detectionBarSprite: {fileID: 1657178623}
@@ -4919,8 +4913,6 @@ MonoBehaviour:
   playerVisible: 0
   search1: 0
   search2: 0
-  smokeVisible: 0
-  smokeSeen: 0
   timePlayerVisible: 0
   organiseAttack: 0
   organiseSearch: 0
@@ -5938,14 +5930,10 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  smokeMask:
-    serializedVersion: 2
-    m_Bits: 512
   player: {fileID: 2057802920}
   agent: {fileID: 1964906706}
   spotlight: {fileID: 131822573}
   guard: {fileID: 1964906707}
-  smoke: {fileID: 0}
   alertedSprite: {fileID: 1564104391}
   searchingSprite: {fileID: 1455869980}
   detectionBarSprite: {fileID: 976747166}
@@ -5954,8 +5942,6 @@ MonoBehaviour:
   playerVisible: 0
   search1: 0
   search2: 0
-  smokeVisible: 0
-  smokeSeen: 0
   timePlayerVisible: 0
   organiseAttack: 0
   organiseSearch: 0

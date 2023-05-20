@@ -6,7 +6,6 @@ public class CheckEnemyZone : Node
     private Transform _transform;
     private Transform _player;
     private LayerMask _obstacleMask;
-    private LayerMask _smokeMask;
     private GuardBehaviourTree _guard;
 
     float angleA = 30;
@@ -17,12 +16,11 @@ public class CheckEnemyZone : Node
     float mediumViewingDist = 25.0f;
     float nearViewingDist = 15.0f;
 
-    public CheckEnemyZone(Transform transform, Transform player, LayerMask obstacleMask, LayerMask smokeMask, GuardBehaviourTree guard)
+    public CheckEnemyZone(Transform transform, Transform player, LayerMask obstacleMask, GuardBehaviourTree guard)
     {
         _transform = transform;
         _player = player;
         _obstacleMask = obstacleMask;
-        _smokeMask = smokeMask;
         _guard = guard;
     }
 
@@ -35,7 +33,7 @@ public class CheckEnemyZone : Node
         float playerGuardAngle = Vector3.Angle(_transform.forward, distToPlayer);  //[1]
 
         // Checks if there is an obstacle between the guard and player
-        if (!Physics.Linecast(_transform.position, _player.position, _obstacleMask) && !Physics.Linecast(_transform.position, _player.position, _smokeMask))
+        if (!Physics.Linecast(_transform.position, _player.position, _obstacleMask))
         {
             // Checks to see the distance between the guard and player
             if (Vector3.Distance(_transform.position, _player.position) < nearViewingDist)  //[1]

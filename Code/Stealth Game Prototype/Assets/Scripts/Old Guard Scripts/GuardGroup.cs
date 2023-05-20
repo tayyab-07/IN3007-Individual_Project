@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class GuardGroup : MonoBehaviour
 {
+    // This file is no longer used in the code
+    // There is an almost identical class which controls the guards in roughly the same way called BTGuardGroup
+    // BTGuardGriup does the same things as this class but wokrs with the behaviour tree architecture whereas this class does not. Making it obsolete.
+
+
     Transform player;
     System.Random rnd = new System.Random();
 

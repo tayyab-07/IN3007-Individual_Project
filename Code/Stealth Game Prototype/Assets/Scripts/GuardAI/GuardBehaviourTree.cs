@@ -10,12 +10,19 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
     [Header("Objects")]
     public LayerMask obstacleMask;
-    public LayerMask smokeMask;
     public Transform player;
     public NavMeshAgent agent;
     public Light spotlight;
     public GuardBehaviourTree guard;
-    public Transform smoke;
+
+    [Header("Smoke")]
+    // Part of additional smoke implementation. Currently not working
+    // Transform and LayerMask required as part of Check Smoke(Class not included in tree currently) and Check Enemy Zone respectively
+    //public Transform smoke;
+    //public LayerMask smokeMask;
+
+    //public bool smokeVisible = false;
+    //public bool smokeSeen = false;
 
     [Header("Sprites")]
     public AlertedSprite alertedSprite;
@@ -29,9 +36,6 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
     public bool search1 = false;
     public bool search2 = false;
-
-    public bool smokeVisible = false;
-    public bool smokeSeen = false;
 
     [Header("Timer")]
     public float timePlayerVisible;
@@ -52,23 +56,23 @@ public class GuardBehaviourTree : BehaviorTree.Tree
         zone5
     }
 
-    public void Start()
-    {
-        smoke = GameObject.FindGameObjectWithTag("Smoke").transform;
-    }
-
     protected override Node SetupTree()
     {
         // Structure for guard behaviour tree
 
         Node root = new Selector(new List<Node>
         {
-
+            /*
+            // Classes for checking if the guard can see smoke and reacting accordingly
+            // Currently not working
+            
             new Sequence (new List<Node>
             { 
-                new CheckSmoke(transform, agent, smoke, obstacleMask, guard),
+                new CheckSmoke(transform, agent, obstacleMask, guard),
                 new GuardSmokeResponse(guard),
             }),
+
+            */
 
             new Sequence (new List<Node>
             {
@@ -78,7 +82,7 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
             new Sequence (new List<Node>
             { 
-                new CheckEnemyZone(transform, player, obstacleMask, smokeMask, guard),
+                new CheckEnemyZone(transform, player, obstacleMask, guard),
 
                 new CheckEnemySpotted(spotlight, guard, alertedSprite, searchingSprite, detectionBarSprite),
 
