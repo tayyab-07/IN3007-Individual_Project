@@ -1,8 +1,10 @@
 using UnityEngine;
+using TMPro;
 
 // This file was largely NOT written by me
-// I only wrote the parts related to the cooldown and reset throw
-// Tutorial from: https://www.youtube.com/watch?v=BYL6JtUdEY0&ab_channel=Brackeys
+// I only wrote the parts related to the cooldown, and limiting the smoke bombs uses
+// Main Tutorial from: https://www.youtube.com/watch?v=BYL6JtUdEY0&ab_channel=Brackeys
+// Tutorial fro TextMeshPro/TMP from: https://www.youtube.com/watch?v=Xw506Rfd9Q4&ab_channel=GameDevTrauminEnglish
 
 // Class to throw a smoke bomb
 
@@ -11,25 +13,39 @@ public class DropSmoke : MonoBehaviour
     [Header("Variables")]
     public float throwForce;
     public float throwCooldown;
+    public int bombCount;
     bool readyToThrow = true;
     Vector3 offset = new Vector3();
 
     [Header("Objects")]
     public GameObject grenadePrefab;
     public Transform Orienatation;
+    public TMP_Text bombCountText;
 
     [Header("Grenade Key")]
     public KeyCode grenadekey = KeyCode.G;
 
+
+    void Start()
+    {
+        // Set current smoke bomb count in HUD
+        bombCountText.text = bombCount.ToString();
+    }
+
     // Update is called once per frame
     void Update()
     {
-        // only throw the grenade if ready to throw. once thrown only reset the throw after 'throwCooldown' time
-        if (Input.GetKey(grenadekey) && readyToThrow == true)
+        // only throw the grenade if ready to throw and the player has grenades to throw. Once thrown only reset the throw after 'throwCooldown' time
+        if (Input.GetKey(grenadekey) && readyToThrow == true && bombCount > 0)
         {
             readyToThrow = false;
 
             ThrowGrenade();
+
+            bombCount = bombCount - 1;
+
+            // Set new smoke bomb count in HUD
+            bombCountText.text = bombCount.ToString();
 
             Invoke(nameof(ResetThrow), throwCooldown);
         }

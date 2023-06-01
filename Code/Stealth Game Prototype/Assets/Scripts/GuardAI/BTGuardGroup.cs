@@ -55,7 +55,7 @@ public class BTGuardGroup : MonoBehaviour
         // Set all guards to search one place until 15sec and another until 30sec
         for (int i = 0; i < guards.Length; i++)
         {
-            if (searchTimer > 10 && searchTimer < 25 && guards[i].search1 == false)
+            if (searchTimer > 5 && searchTimer < 25 && guards[i].search1 == false)
             {
                 GuardSearch(guards[i]);
                 guards[i].search1 = true;
