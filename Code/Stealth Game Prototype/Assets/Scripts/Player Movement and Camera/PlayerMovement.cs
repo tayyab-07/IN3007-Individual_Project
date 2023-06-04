@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// tutorial from: https://www.youtube.com/watch?v=f473C43s8nE&t=379s&ab_channel=Dave%2FGameDevelopment
 // This file is NOT written by me
+// tutorial from: https://www.youtube.com/watch?v=f473C43s8nE&t=379s&ab_channel=Dave%2FGameDevelopment
+// tutorial from: https://www.youtube.com/watch?v=xCxSjgYTw9c&t=258s&ab_channel=Dave%2FGameDevelopment
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -36,6 +37,12 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     bool grounded;
 
+    [Header("Slope")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
+    private bool exitingSlope;
+
+    [Header("Orientation")]
     public Transform orientation;
 
     float horizontalInput;
@@ -141,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = crouchSpeed;
         }
 
-        if (grounded && Input.GetKey(SprintKey))
+        else if (grounded && Input.GetKey(SprintKey))
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
@@ -158,6 +165,16 @@ public class PlayerMovement : MonoBehaviour
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
+        if (OnSlope() && !exitingSlope)
+        {
+            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+
+            if (rb.velocity.y > 0)
+            {
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+        }
+
         // move speed on ground
         if (grounded)
         { 
@@ -169,26 +186,43 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
         }
+
+        // turn off gravity while on slope
+        rb.useGravity = !OnSlope();
             
     }
 
     // function to clamp move speed to desired max value
     private void SpeedControl()
     {
-        // calculates move velocity
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        // compares player velocity to max speed
-        if (flatVel.magnitude > moveSpeed)
+        // limiting speed on a slope
+        if (OnSlope() && !exitingSlope)
         {
-            // limits velocity to max speed
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            if (rb.velocity.magnitude > moveSpeed)
+            { 
+                rb.velocity = rb.velocity.normalized * moveSpeed;
+            }
+        }
+
+        else 
+        {
+            // calculates move velocity
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            // compares player velocity to max speed
+            if (flatVel.magnitude > moveSpeed)
+            {
+                // limits velocity to max speed
+                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
         }
     }
 
     private void Jump()
     {
+        exitingSlope = true;
+
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
@@ -196,9 +230,29 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
-    // funtion called when player is back on the ground
+    // function called when player is back on the ground
     private void ResetJump()
     {
         readyToJump = true;
+
+        exitingSlope = false; 
     }
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            grounded = true;
+            return angle < maxSlopeAngle && angle != 0;
+        }
+
+        return false;
+    }
+
+    private Vector3 GetSlopeMoveDirection()
+    {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    }
+
 }

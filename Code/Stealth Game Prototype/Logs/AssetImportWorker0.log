@@ -1,0 +1,294 @@
+Using pre-set license
+Built from '2020.3/staging' branch; Version is '2020.3.29f1 (2ff179115da0) revision 3142009'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10  (10.0.19045) 64bit Core' Language: 'en' Physical Memory: 16298 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\2020.3.29f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/T4YY4/Documents/GitHub/Individual Project/individualProject/Code/Stealth Game Prototype
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+61476
+Successfully changed project path to: C:/Users/T4YY4/Documents/GitHub/Individual Project/individualProject/Code/Stealth Game Prototype
+C:/Users/T4YY4/Documents/GitHub/Individual Project/individualProject/Code/Stealth Game Prototype
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 90.19 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.29f1 (2ff179115da0)
+[Subsystems] Discovering subsystems at path C:/Program Files/2020.3.29f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/T4YY4/Documents/GitHub/Individual Project/individualProject/Code/Stealth Game Prototype/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Radeon RX 580 Series (ID=0x67df)
+    Vendor:   
+    VRAM:     8170 MB
+    Driver:   31.0.12027.9001
+Initialize mono
+Mono path[0] = 'C:/Program Files/2020.3.29f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/2020.3.29f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/2020.3.29f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56392
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/2020.3.29f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/2020.3.29f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.007946 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 85.83 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.655 seconds
+Domain Reload Profiling:
+	ReloadAssembly (655ms)
+		BeginReloadAssembly (104ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (0ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (1ms)
+		EndReloadAssembly (457ms)
+			LoadAssemblies (98ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (130ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (25ms)
+			SetupLoadedEditorAssemblies (194ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (5ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (86ms)
+				BeforeProcessingInitializeOnLoad (12ms)
+				ProcessInitializeOnLoadAttributes (68ms)
+				ProcessInitializeOnLoadMethodAttributes (22ms)
+				AfterProcessingInitializeOnLoad (0ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (0ms)
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.009522 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 86.86 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.691 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1693ms)
+		BeginReloadAssembly (184ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (4ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (19ms)
+		EndReloadAssembly (1423ms)
+			LoadAssemblies (158ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (309ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (56ms)
+			SetupLoadedEditorAssemblies (811ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (5ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (87ms)
+				BeforeProcessingInitializeOnLoad (149ms)
+				ProcessInitializeOnLoadAttributes (539ms)
+				ProcessInitializeOnLoadMethodAttributes (9ms)
+				AfterProcessingInitializeOnLoad (22ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 0.81 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 4020 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 272.7 MB.
+System memory in use after: 272.8 MB.
+
+Unloading 33 unused Assets to reduce memory usage. Loaded Objects now: 4509.
+Total: 3.611000 ms (FindLiveObjects: 0.315600 ms CreateObjectMapping: 0.103600 ms MarkObjects: 3.052200 ms  DeleteObjects: 0.138600 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  path: Assets/Missile/missile.prefab
+  artifactKey: Guid(1d37014fd411c524db3696bba6ff1d21) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/missile.prefab using Guid(1d37014fd411c524db3696bba6ff1d21) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b2f1ea4d9005d2a50809d6338dc260d3') in 0.157143 seconds 
+  Import took 0.162496 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000154 seconds.
+  path: Assets/Missile/missile_green.prefab
+  artifactKey: Guid(8360bcdf5f97bdc44ae3e39b8aca3404) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/missile_green.prefab using Guid(8360bcdf5f97bdc44ae3e39b8aca3404) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dca1db98993dba9f40c855481461ef1c') in 0.023140 seconds 
+  Import took 0.028831 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 50.930887 seconds.
+  path: Assets/Missile/Materials/smoke_material.mat
+  artifactKey: Guid(b5ed92a562f35be459c796f953076c8c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Materials/smoke_material.mat using Guid(b5ed92a562f35be459c796f953076c8c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bca9b8bb1d9a7a9fdf920504573b59e0') in 0.029073 seconds 
+  Import took 0.034452 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 20.940282 seconds.
+  path: Assets/Missile/Object
+  artifactKey: Guid(0578d7346cc5d5e42b208355460a728b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Object using Guid(0578d7346cc5d5e42b208355460a728b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cea4784e6da6e0be742d3ce06bfa1577') in 0.007209 seconds 
+  Import took 0.013049 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.495743 seconds.
+  path: Assets/Missile/Object/missile.obj
+  artifactKey: Guid(5311afa115791b64cba3e297837eac07) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Object/missile.obj using Guid(5311afa115791b64cba3e297837eac07) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3d17c7e4f0f5fca875f9c39d78ecf7c2') in 0.082158 seconds 
+  Import took 0.087470 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.438729 seconds.
+  path: Assets/Missile/Object/Materials
+  artifactKey: Guid(9fa3a68d542d5ce4d9b397c4f3e0ff5b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Object/Materials using Guid(9fa3a68d542d5ce4d9b397c4f3e0ff5b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '15a4500bd78f4b1c9eafbf5aaf8329cf') in 0.006547 seconds 
+  Import took 0.011756 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.141924 seconds.
+  path: Assets/Missile/Object/Materials/missileMat.mat
+  artifactKey: Guid(9072fb9767b949547a9d4b4edc0097cd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Object/Materials/missileMat.mat using Guid(9072fb9767b949547a9d4b4edc0097cd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c1b5bc90504c175e700c5838cc9d9de7') in 0.022573 seconds 
+  Import took 0.028266 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 11.139580 seconds.
+  path: Assets/Missile/Textures
+  artifactKey: Guid(f7f73846f0a90284aa69ff57ad5b51cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Textures using Guid(f7f73846f0a90284aa69ff57ad5b51cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ac26d81e51e6667511225b2dfb54ba27') in 0.003269 seconds 
+  Import took 0.008977 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.556475 seconds.
+  path: Assets/Missile/Textures/missile_ao.jpg
+  artifactKey: Guid(b8f607d6070ae44438b9938067c796bb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Textures/missile_ao.jpg using Guid(b8f607d6070ae44438b9938067c796bb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'caadb37dcd47562774f65df24539ed29') in 0.022291 seconds 
+  Import took 0.028438 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000158 seconds.
+  path: Assets/Missile/Textures/missile_diffuse_green.jpg
+  artifactKey: Guid(0f8f024afb357dd44993a87e5b2ca90e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Textures/missile_diffuse_green.jpg using Guid(0f8f024afb357dd44993a87e5b2ca90e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2e00c416d605028cd02ede17a287a471') in 0.012952 seconds 
+  Import took 0.018037 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000162 seconds.
+  path: Assets/Missile/Textures/missile_diffuse.jpg
+  artifactKey: Guid(f941c14b0ad2a4448b06a4f0802bb697) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Textures/missile_diffuse.jpg using Guid(f941c14b0ad2a4448b06a4f0802bb697) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'eb11348aaafd25b67d67b54f0c95c743') in 0.013325 seconds 
+  Import took 0.018442 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000133 seconds.
+  path: Assets/Missile/Textures/missile_normal.jpg
+  artifactKey: Guid(6bd4340553fed3049a60de46184245fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Textures/missile_normal.jpg using Guid(6bd4340553fed3049a60de46184245fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1d3ac958d4de1252aeb90689eb239059') in 0.015610 seconds 
+  Import took 0.020524 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000144 seconds.
+  path: Assets/Missile/Textures/particle_smoke.jpg
+  artifactKey: Guid(11abca838195ee348b83ea4c1ada0747) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Textures/particle_smoke.jpg using Guid(11abca838195ee348b83ea4c1ada0747) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5bd60b54f8bc28a9b4ea091da15634fa') in 0.012092 seconds 
+  Import took 0.016806 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 408.439394 seconds.
+  path: Assets/Missile/Materials/missie_material.mat
+  artifactKey: Guid(3420febe786e5b64cbfcfb882c4b9c16) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Materials/missie_material.mat using Guid(3420febe786e5b64cbfcfb882c4b9c16) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6be2381ec817eaba3af0806003eab72e') in 0.019738 seconds 
+  Import took 0.026489 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000217 seconds.
+  path: Assets/Missile/Materials/missile_material_green.mat
+  artifactKey: Guid(3d80484738756bd42a05c06bc114941f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Missile/Materials/missile_material_green.mat using Guid(3d80484738756bd42a05c06bc114941f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fc174969ac7131c7f1a32e126e06bf11') in 0.024310 seconds 
+  Import took 0.029389 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.068097 seconds.
+  path: Assets/New Terrain 1.asset
+  artifactKey: Guid(c4ac45b7425fb8a4abf8b231fe4e5dec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/New Terrain 1.asset using Guid(c4ac45b7425fb8a4abf8b231fe4e5dec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '494c5546d86d34169d09668d49b61fac') in 0.042198 seconds 
+  Import took 0.048118 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 22.055452 seconds.
+  path: Assets/My Materials/Missile Holder.mat
+  artifactKey: Guid(9b9dd37a2fbc3f84b9d28d6ea6b8458b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/My Materials/Missile Holder.mat using Guid(9b9dd37a2fbc3f84b9d28d6ea6b8458b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ff4afea8919c2886195cd22f80cce313') in 0.013811 seconds 
+  Import took 0.019723 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 26.094701 seconds.
+  path: Assets/Unity Asset Store/Missile
+  artifactKey: Guid(2edad73d80401e24b8ca66804edd4e0f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Unity Asset Store/Missile using Guid(2edad73d80401e24b8ca66804edd4e0f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2bc9073596d2abf4ac1c653d2c7a8301') in 0.007515 seconds 
+  Import took 0.013395 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 11.841506 seconds.
+  path: Assets/Unity Asset Store/Missile/Materials
+  artifactKey: Guid(2993ceb6541cc394381f9374130711f1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Unity Asset Store/Missile/Materials using Guid(2993ceb6541cc394381f9374130711f1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '71d46bd2bb3a1faedd6b04c5bc66bdf7') in 0.003897 seconds 
+  Import took 0.009601 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 87.697450 seconds.
+  path: Assets/Prefabs/World Assets/Missile Holder.prefab
+  artifactKey: Guid(fa379b7881d4f194e82809b990401fad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/World Assets/Missile Holder.prefab using Guid(fa379b7881d4f194e82809b990401fad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '961961c68adcef2af371bd76d5266b78') in 0.048062 seconds 
+  Import took 0.053928 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
