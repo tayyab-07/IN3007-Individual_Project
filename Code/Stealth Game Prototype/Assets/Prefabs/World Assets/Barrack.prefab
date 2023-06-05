@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8263771659374128499}
   - component: {fileID: 1146700012610564811}
   - component: {fileID: 556221711212767682}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Barrack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4665,7 +4665,7 @@ GameObject:
   - component: {fileID: 6079254641603903555}
   - component: {fileID: 4927238431901978111}
   - component: {fileID: 3676010387074982339}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
