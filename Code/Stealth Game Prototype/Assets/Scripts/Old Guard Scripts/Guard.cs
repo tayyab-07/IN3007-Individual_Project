@@ -1,13 +1,11 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
 // [1] tutorial from: https://www.youtube.com/watch?v=TfhPBAe9Tt8&ab_channel=SebastianLague
-// [2] tutorial from: https://www.youtube.com/watch?v=MOLg3W0HeLs&t=210s&ab_channel=SebastianLague
+// Github link for tutorial: https://github.com/SebLague/Intro-to-Gamedev/tree/master/Episode%2024
 
 // Disclaimer: most of this file IS written by me.
 // there are some bits still kept from the sources above.
-// i will use [1] and [2] at the end of the lines that were NOT written by me
 
 // This file is no longer used in the code
 // The classes in the new Guard Behaviour tree were largely based on the methods from this class. Making this class obsolete.
@@ -69,7 +67,7 @@ public class Guard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;  //[1]
+        player = GameObject.FindGameObjectWithTag("Player").transform;  
 
         initialSpotlightColour = spotlight.color; //[2]
         initialGuardLocation = transform.position;
@@ -93,14 +91,14 @@ public class Guard : MonoBehaviour
         // conditional statements to find out what zone a player is in
         // always set to empty zone if any condition isnt met
 
-        Vector3 distToPlayer = (player.position - transform.position).normalized;  //[1]
-        float playerGuardAngle = Vector3.Angle(transform.forward, distToPlayer);  //[1]
+        Vector3 distToPlayer = (player.position - transform.position).normalized;  
+        float playerGuardAngle = Vector3.Angle(transform.forward, distToPlayer);  
 
         // Checks if there is an obstacle between the guard and player
         if (!Physics.Linecast(transform.position, player.position, viewMask))
         {
             // Checks to see the distance between the guard and player
-            if (Vector3.Distance(transform.position, player.position) < nearViewingDist)  //[1]
+            if (Vector3.Distance(transform.position, player.position) < nearViewingDist)  
             {
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
@@ -120,7 +118,7 @@ public class Guard : MonoBehaviour
             }
 
             // Checks to see the distance between the guard and player
-            else if (Vector3.Distance(transform.position, player.position) < mediumViewingDist)  //[1]
+            else if (Vector3.Distance(transform.position, player.position) < mediumViewingDist)  
             {
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
@@ -145,7 +143,7 @@ public class Guard : MonoBehaviour
             }
 
             // Checks to see the distance between the guard and player
-            else if (Vector3.Distance(transform.position, player.position) < farViewingDist)  //[1]
+            else if (Vector3.Distance(transform.position, player.position) < farViewingDist)  
             {
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
@@ -234,7 +232,7 @@ public class Guard : MonoBehaviour
 
         if (zone == ZoneState.zone1)
         {
-            timePlayerVisible = timePlayerVisible + Time.deltaTime;  //[2] 
+            timePlayerVisible = timePlayerVisible + Time.deltaTime;   
             if (timePlayerVisible >= zone1Timer)
             {
                 spottedColour = Color.red;
@@ -246,7 +244,7 @@ public class Guard : MonoBehaviour
 
         else if (zone == ZoneState.zone2)
         {
-            timePlayerVisible = timePlayerVisible + Time.deltaTime;  //[2]
+            timePlayerVisible = timePlayerVisible + Time.deltaTime;  
             if (timePlayerVisible >= zone2Timer)
             {
                 spottedColour = Color.magenta;
@@ -258,7 +256,7 @@ public class Guard : MonoBehaviour
 
         else if (zone == ZoneState.zone3)
         {
-            timePlayerVisible = timePlayerVisible + Time.deltaTime;   //[2]
+            timePlayerVisible = timePlayerVisible + Time.deltaTime;   
             if (timePlayerVisible >= zone3Timer)
             {
                 spottedColour = Color.yellow;
@@ -270,7 +268,7 @@ public class Guard : MonoBehaviour
 
         else if (zone == ZoneState.zone4)
         {
-            timePlayerVisible = timePlayerVisible + Time.deltaTime;   //[2]
+            timePlayerVisible = timePlayerVisible + Time.deltaTime;   
             if (timePlayerVisible >= zone4Timer)
             {
                 spottedColour = Color.green;
@@ -282,7 +280,7 @@ public class Guard : MonoBehaviour
 
         else if (zone == ZoneState.zone5)
         {
-            timePlayerVisible = timePlayerVisible + Time.deltaTime;   //[2]
+            timePlayerVisible = timePlayerVisible + Time.deltaTime;   
             if (timePlayerVisible >= zone5Timer)
             {
                 spottedColour = Color.blue;
@@ -297,11 +295,11 @@ public class Guard : MonoBehaviour
         {
             attackPlayer = false;
             spottedColour = initialSpotlightColour;
-            timePlayerVisible = timePlayerVisible - Time.deltaTime;    //[2]
+            timePlayerVisible = timePlayerVisible - Time.deltaTime;    
         }
 
         // timer doesnt exceed 0 or zone 5 timer
-        timePlayerVisible = Mathf.Clamp(timePlayerVisible, 0, zone5Timer);   //[2]
+        timePlayerVisible = Mathf.Clamp(timePlayerVisible, 0, zone5Timer);   
         spotlight.color = spottedColour;
     }
 

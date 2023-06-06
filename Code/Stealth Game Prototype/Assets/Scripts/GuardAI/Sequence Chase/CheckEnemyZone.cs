@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class CheckEnemyZone : Node
 {
+    // This class uses basic geometry to dtermine which zone of the enemy`s vision cone the player is in
+    // Thw zone is then passed on to Check Enemy Spotted where that class can the potentially detect the player 
+
     private Transform _transform;
     private Transform _player;
     private LayerMask _obstacleMask;
@@ -29,14 +32,14 @@ public class CheckEnemyZone : Node
         // conditional statements to find out what zone a player is in
         // always set to empty zone if any condition isnt met
         
-        Vector3 distToPlayer = (_player.position - _transform.position).normalized;  //[1]
-        float playerGuardAngle = Vector3.Angle(_transform.forward, distToPlayer);  //[1]
+        Vector3 distToPlayer = (_player.position - _transform.position).normalized;  
+        float playerGuardAngle = Vector3.Angle(_transform.forward, distToPlayer);  
 
         // Checks if there is an obstacle between the guard and player
         if (!Physics.Linecast(_transform.position, _player.position, _obstacleMask))
         {
             // Checks to see the distance between the guard and player
-            if (Vector3.Distance(_transform.position, _player.position) < nearViewingDist)  //[1]
+            if (Vector3.Distance(_transform.position, _player.position) < nearViewingDist)  
             {
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
@@ -56,7 +59,7 @@ public class CheckEnemyZone : Node
             }
 
             // Checks to see the distance between the guard and player
-            else if (Vector3.Distance(_transform.position, _player.position) < mediumViewingDist)  //[1]
+            else if (Vector3.Distance(_transform.position, _player.position) < mediumViewingDist) 
             {
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
@@ -81,7 +84,7 @@ public class CheckEnemyZone : Node
             }
 
             // Checks to see the distance between the guard and player
-            else if (Vector3.Distance(_transform.position, _player.position) < farViewingDist)  //[1]
+            else if (Vector3.Distance(_transform.position, _player.position) < farViewingDist) 
             {
                 // Checks to see the angle between the guard and player
                 if (playerGuardAngle < angleA / 2f)
@@ -116,7 +119,7 @@ public class CheckEnemyZone : Node
             _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
         }
 
-        // Return success regardless of the outcome as outcomes can only be zones 1 through 5 and empty zone which are all necesary for the next leaf
+        // Return success regardless of the outcome as outcomes can only be zones 1 through 5 and empty zone which are all necesary for the next leaf node 
         state = NodeState.SUCCESS;
         return state;
     }

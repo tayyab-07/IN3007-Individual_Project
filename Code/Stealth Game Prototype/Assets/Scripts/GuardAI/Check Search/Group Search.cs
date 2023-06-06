@@ -1,7 +1,9 @@
 using BehaviorTree;
 
 public class GroupSearch : Node
-{
+{ 
+    // This class allows the guard to start a coordinated search with the other guards
+
     private AlertedSprite _alertedSprite;
     private SearchingSprite _searchingSprite;
 
@@ -18,7 +20,7 @@ public class GroupSearch : Node
         // in order to do this the guard cant be chasing or patrolling etc...
         // therefore this simple class is used to ensure the guard is not doing anything else while searching
 
-        //disable the alerted UI element and enable the sp[otted UI element for Searching
+        //disable the alerted UI element and enable the spotted UI element for Searching
         _alertedSprite.DisableAlerted();
         _searchingSprite.DisplaySearching();
 

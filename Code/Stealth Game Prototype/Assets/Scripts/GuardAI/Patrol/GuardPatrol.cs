@@ -4,6 +4,8 @@ using UnityEngine.AI;
 
 public class GuardPatrol : Node
 {
+    // This class handles the patrolling of the guards around their patrol paths
+
     private Transform _guardTransform;
     private Transform[] _patrolPoints;
     private NavMeshAgent _agent;
@@ -28,18 +30,18 @@ public class GuardPatrol : Node
 
     public override NodeState Evaluate()
     {
+        // Method to set the patrol path of the guard
+
         // disable UI entirely if the guard is patrolling
         _alertedSprite.DisableAlerted();
         _searchingSprite.DisableSearching();
 
-        // Method to set the patrol path of the guard
-
         Transform wp = _patrolPoints[currentPatrolPoint];
 
-        // since organise attack returns false to allow for th rest of the tree to be run in order to chase and actually attack the guard
+        // since organise attack returns false to allow for the rest of the tree to be run, in order to chase and actually attack the guard
         // the tree needs to make sure that the guard isnt patrolling either
-        // since there is no class used to check whether a guard should bve patrolling or not
-        // there is some simple validation which will return failure if the group are currently organising their attack
+        // since there is no class used to check whether a guard should be patrolling or not
+        // there is some simple validation used which will return failure if the group are currently organising their attack
         if (_guard.organiseAttack == true)
         {
             state = NodeState.FAILURE;

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // tutorial from: https://www.youtube.com/watch?v=f473C43s8nE&t=379s&ab_channel=Dave%2FGameDevelopment
@@ -7,6 +5,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
+    // This class handles a basic FPS camera  
 
     // variable for mouse sensitivity
     public float sensX;
@@ -25,7 +24,6 @@ public class PlayerCamera : MonoBehaviour
         // locks cursor within game window and makes it invisible
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
     }
 
     // Update is called once per frame

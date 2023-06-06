@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 
 // Tutorial from: https://www.youtube.com/watch?v=aR6wt5BlE-E&ab_channel=MinaP%C3%AAcheux
+// Github link for tutorial: https://github.com/MinaPecheux/UnityTutorials-BehaviourTrees
 // This file was NOT written by me
+
+// File provides basic SEQUENCE (AND Gate) functionality for use in the behaviour tree architecture
 
 namespace BehaviorTree
 {

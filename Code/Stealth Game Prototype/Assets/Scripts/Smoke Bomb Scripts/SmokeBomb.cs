@@ -3,9 +3,10 @@ using UnityEngine;
 // This class was NOT written by me.
 // Tutorial from: https://www.youtube.com/watch?v=BYL6JtUdEY0&ab_channel=Brackeys
 
-
 public class SmokeBomb : MonoBehaviour
 {
+    // This class handles the release of the effect, in this implemnation this is the smoke effect afetr the smok bomb cannister is destroyed
+
     public GameObject explosionEffect;
 
     public float delay = 1f;

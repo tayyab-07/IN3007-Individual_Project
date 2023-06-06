@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // This file is NOT written by me
@@ -8,8 +6,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // headers to set variables in Unity 
+    // This class implements a basic FPS controller using a rigidbody object
 
+    // headers to set variables in Unity 
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
@@ -147,7 +146,8 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
         }
-
+        // else if here under crouch key to ensure the player can either crouch or sprint not do both
+        // I.E stops the player from being able to move at sprint speed while crouched
         else if (grounded && Input.GetKey(SprintKey))
         {
             state = MovementState.sprinting;
@@ -165,6 +165,7 @@ public class PlayerMovement : MonoBehaviour
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
+        // add force in the slope direction to handle slopes better
         if (OnSlope() && !exitingSlope)
         {
             rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
@@ -240,6 +241,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool OnSlope()
     {
+        // Checks to see if tye player is crrently ona slope or not
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
@@ -252,6 +254,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 GetSlopeMoveDirection()
     {
+        // Calculates the slope direction in order to add force in this direction
+
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 

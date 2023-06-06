@@ -1,7 +1,12 @@
 using UnityEngine;
 
+// This class handles a group of guards
+// It controls when they cooridnate attacks
+// It also completely controls when, where and how long each guard searches for 
+
 public class BTGuardGroup : MonoBehaviour
 {
+    [Header("Random")]
     System.Random rnd = new System.Random();
 
     [Header("Guards")]
@@ -19,7 +24,7 @@ public class BTGuardGroup : MonoBehaviour
     public Transform loc8;
     public Transform loc9;
 
-    [Header("Search")]
+    [Header("Search Timer")]
     public float searchTimer;
 
     // Start is called before the first frame update
@@ -31,8 +36,10 @@ public class BTGuardGroup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Continuos loop running in order to chekc if any of the guards have seen the player but have since lost sight of him
         for (int i = 0; i < guards.Length; i++)
         {
+            // If a guard has seen the player, loop through all guards and tell all of the them to organise a search 
             if (guards[i].playerSeen == true && guards[i].playerVisible == false)
             {
                 for (int j = 0; j < guards.Length; j++)
@@ -49,10 +56,12 @@ public class BTGuardGroup : MonoBehaviour
 
     void ConductSearch()
     {
-        // Search for 30 seconds then reset to start location
+        // Method conducts the timer for the guards search pattern and resets the serach if the player hsnt been found in teh allotted time
+
+        // Search for 'serachTimer' seconds then reset to start location
         searchTimer = searchTimer + Time.deltaTime;
 
-        // Set all guards to search one place until 15sec and another until 30sec
+        // Set all guards to search one place until 'x' sec and another until 'y' sec
         for (int i = 0; i < guards.Length; i++)
         {
             if (searchTimer > 5 && searchTimer < 25 && guards[i].search1 == false)
@@ -77,10 +86,15 @@ public class BTGuardGroup : MonoBehaviour
 
     void ConductAttack()
     {
+        // Method mainly organises attack
+        // Method also has functionlaity for disbanding the attack if none of the guards can see the player
+
         int guardsNotSeeingPlayer = 0;
 
+        // Loops through all guards to see if any are currently looking at the player
         for (int i = 0; i < guards.Length; i++)
         {
+            // If a guard is looking at the player, reset the guards Search variables and organise an attack
             if (guards[i].playerVisible == true)
             {
                 searchTimer = 0;
@@ -92,12 +106,15 @@ public class BTGuardGroup : MonoBehaviour
                 }
             }
 
+            // if no gurad is looking at the player, increment a variable
+            // This variable can be used to compare againts the total number of guards in a group
             else
             {
                 guardsNotSeeingPlayer = guardsNotSeeingPlayer + 1;
             }
 
-            if (guardsNotSeeingPlayer == 4)
+            // If all of the guards cannot see the player, stop attacking 
+            if (guardsNotSeeingPlayer == guards.Length)
             {
                 for (int j = 0; j < guards.Length; j++)
                 {
@@ -111,7 +128,9 @@ public class BTGuardGroup : MonoBehaviour
     void GuardSearch(GuardBehaviourTree guard)
     {
         // Method to randomly assign a guard to a search location
+        // Search location are set by empty gameObjects`s transforms in Unity
 
+        // Random variable to assign a guard with a random search location
         float rand = rnd.Next(0, 10);
 
         switch (rand)
@@ -151,6 +170,7 @@ public class BTGuardGroup : MonoBehaviour
 
     void ResetSearch()
     {
+        // Method to reset ALL of the search variables, should the player not be found 
         searchTimer = 0;
         for (int i = 0; i < guards.Length; i++)
         {

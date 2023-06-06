@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class DetectionBarSprite : MonoBehaviour
 {
     // Class for the guard`s Detection bar
-    // class sest the current detection amount as well as enabling and disabling the bar
+    // class sets the current detection amount as well as enabling and disabling the bar
 
     public Slider slider;
     public Gradient gradient;

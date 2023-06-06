@@ -6,6 +6,9 @@ public class GuardGroup : MonoBehaviour
     // There is an almost identical class which controls the guards in roughly the same way called BTGuardGroup
     // BTGuardGriup does the same things as this class but wokrs with the behaviour tree architecture whereas this class does not. Making it obsolete.
 
+    // There wa spotentila to simply rewire this class into the one currently used called BTGuardGroup
+    // However at the tiem of making that class, it was not clear how similar they were going to be so annew class was created
+    // Eventually however, they eneded up being very similar but with slightly differnt syntax
 
     Transform player;
     System.Random rnd = new System.Random();

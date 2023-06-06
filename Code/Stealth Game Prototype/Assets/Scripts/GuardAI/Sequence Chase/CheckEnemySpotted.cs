@@ -1,9 +1,10 @@
 using BehaviorTree;
-using System.Text;
 using UnityEngine;
 
 public class CheckEnemySpotted : Node
 {
+    // This class checks how long the player has spent in any one of the enemy`s vision zones and reacts accordingly
+
     private Light _spotlight;
     private GuardBehaviourTree _guard;
     private AlertedSprite _alertedSprite;
@@ -45,7 +46,8 @@ public class CheckEnemySpotted : Node
             if (_guard.timePlayerVisible >= zone1Timer)
             {
                 UIonDetection();
-                _spotlight.color = Color.red;
+                // The spotlight color is not set here ro zone 1, but is instead set in Guard Attack.
+                // This is to give the dev some feedback on when that class is running 
                 _guard.attackPlayer = true;
                 _guard.playerSeen = true;
                 _guard.playerVisible = true;

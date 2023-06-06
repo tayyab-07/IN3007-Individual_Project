@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+// This file implemnets the basic behaviour tree loop for the Guard AI in the game
+
 public class GuardBehaviourTree : BehaviorTree.Tree
 {
     [Header("Patrol Points")]
@@ -18,6 +20,7 @@ public class GuardBehaviourTree : BehaviorTree.Tree
     [Header("Smoke")]
     // Part of additional smoke implementation. Currently not working
     // Transform and LayerMask required as part of Check Smoke(Class not included in tree currently) and Check Enemy Zone respectively
+
     //public Transform smoke;
     //public LayerMask smokeMask;
 
@@ -58,7 +61,7 @@ public class GuardBehaviourTree : BehaviorTree.Tree
 
     protected override Node SetupTree()
     {
-        // Structure for guard behaviour tree
+        // Structure for Guard behaviour tree
 
         Node root = new Selector(new List<Node>
         {
@@ -71,15 +74,16 @@ public class GuardBehaviourTree : BehaviorTree.Tree
                 new CheckSmoke(transform, agent, obstacleMask, guard),
                 new GuardSmokeResponse(guard),
             }),
-
             */
 
+            // First sequnce checks if the other guards are attacking, if they are it sends the current guard to go attack as well
             new Sequence (new List<Node>
             {
                 new CheckAttack(guard),
-                new GroupAttack(player, guard, agent),
+                new GroupAttack(player, agent),
             }),
 
+            // Second sequence handles detection of the PLayer and what to do once the player is detected based on if they are within attack range or not
             new Sequence (new List<Node>
             { 
                 new CheckEnemyZone(transform, player, obstacleMask, guard),
@@ -98,12 +102,15 @@ public class GuardBehaviourTree : BehaviorTree.Tree
                 }),
             }),
             
+            // Third sequence checks if other guards are currently searching, if they are, the current guard will join the search
             new Sequence (new List<Node>
             { 
                 new CheckSearch(guard),
                 new GroupSearch(alertedSprite, searchingSprite),
             }),
 
+            // The last Node runs if nothing else returned a SUCCESS
+            // This node just keeps the guard patrolling aroudn a set of points
             new GuardPatrol(transform, patrolPoints, agent, guard, alertedSprite, searchingSprite),
 
         });

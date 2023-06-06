@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // tutorial from: https://www.youtube.com/watch?v=f473C43s8nE&t=379s&ab_channel=Dave%2FGameDevelopment
@@ -7,6 +5,8 @@ using UnityEngine;
 
 public class MoveCamera : MonoBehaviour
 {
+    // This class helps move the camera position to the players position
+
     public Transform cameraPosition;
 
     // Start is called before the first frame update
