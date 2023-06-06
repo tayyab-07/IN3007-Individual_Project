@@ -8,16 +8,16 @@ public class BTGuardGroup : MonoBehaviour
     public GuardBehaviourTree[] guards;
 
     [Header("Search Locations")]
-    public Vector3 loc0 = new Vector3(18, 0, 18);
-    public Vector3 loc1 = new Vector3(0, 0, 22);
-    public Vector3 loc2 = new Vector3(-22, 0, 22);
-    public Vector3 loc3 = new Vector3(-22, 0, 0);
-    public Vector3 loc4 = new Vector3(-22, 0, -22);
-    public Vector3 loc5 = new Vector3(0, 0, -22);
-    public Vector3 loc6 = new Vector3(22, 0, -22);
-    public Vector3 loc7 = new Vector3(-22, 0, 0);
-    public Vector3 loc8 = new Vector3(8, 0, 3.5f);
-    public Vector3 loc9 = new Vector3(-8.5f, 0, 17);
+    public Transform loc0;
+    public Transform loc1;
+    public Transform loc2;
+    public Transform loc3;
+    public Transform loc4;
+    public Transform loc5;
+    public Transform loc6;
+    public Transform loc7;
+    public Transform loc8;
+    public Transform loc9;
 
     [Header("Search")]
     public float searchTimer;
@@ -117,34 +117,34 @@ public class BTGuardGroup : MonoBehaviour
         switch (rand)
         {
             case 0:
-                guard.agent.SetDestination(loc0);
+                guard.agent.SetDestination(loc0.position);
                 break;
             case 1:
-                guard.agent.SetDestination(loc1);
+                guard.agent.SetDestination(loc1.position);
                 break;
             case 2:
-                guard.agent.SetDestination(loc2);
+                guard.agent.SetDestination(loc2.position);
                 break;
             case 3:
-                guard.agent.SetDestination(loc3);
+                guard.agent.SetDestination(loc3.position);
                 break;
             case 4:
-                guard.agent.SetDestination(loc4);
+                guard.agent.SetDestination(loc4.position);
                 break;
             case 5:
-                guard.agent.SetDestination(loc5);
+                guard.agent.SetDestination(loc5.position);
                 break;
             case 6:
-                guard.agent.SetDestination(loc6);
+                guard.agent.SetDestination(loc6.position);
                 break;
             case 7:
-                guard.agent.SetDestination(loc7);
+                guard.agent.SetDestination(loc7.position);
                 break;
             case 8:
-                guard.agent.SetDestination(loc8);
+                guard.agent.SetDestination(loc8.position);
                 break;
             case 9:
-                guard.agent.SetDestination(loc9);
+                guard.agent.SetDestination(loc9.position);
                 break;
         }
     }
