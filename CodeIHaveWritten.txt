@@ -1,0 +1,1107 @@
+using BehaviorTree;
+public class CheckAttack : Node
+{
+
+    // This class check to see if the guard should be attacking, return SUCCESS if they should be
+
+    private GuardBehaviourTree _guard;
+
+    public CheckAttack(GuardBehaviourTree guard) 
+    { 
+        _guard = guard;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // Returns success if group are attacking
+        // feeds into Group Attack.cs
+
+        // organise attack is set by the BTGuardGroup class 
+        if (_guard.organiseAttack == true)
+        {
+            state = NodeState.SUCCESS;
+            return state;
+        }
+
+        else
+        {  
+            state = NodeState.FAILURE; 
+            return state;
+        }
+    }
+}
+using BehaviorTree;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class GroupAttack : Node
+{
+    // Class Tell thge player to manuever for an attack (Go to player)
+    // The actual attacking portion from the guards will be dealt with in the Guard Attack class
+
+    private Transform _player;
+    private NavMeshAgent _agent;
+
+    public GroupAttack(Transform player, NavMeshAgent agent)
+    {
+        _player = player;
+        _agent = agent;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // Sets the guard to go to the player position
+        // return failure to allow for the rest of the tree to run
+        // doing it this way allows the guard to still travell to the player but also use the following branch to check their zone and either chase or actually attack the player
+
+        _agent.SetDestination(_player.position);
+        state = NodeState.FAILURE; 
+        return state;
+    }
+}
+using BehaviorTree;
+
+public class GroupSearch : Node
+{ 
+    // This class allows the guard to start a coordinated search with the other guards
+
+    private AlertedSprite _alertedSprite;
+    private SearchingSprite _searchingSprite;
+
+    public GroupSearch(AlertedSprite alertedSprite, SearchingSprite searchingSprite)
+    {
+        _alertedSprite = alertedSprite;
+        _searchingSprite = searchingSprite;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // very basic class to stop the guard from doing anything if they are searching
+        // searching actions are determined in BTGuardGroup
+        // in order to do this the guard cant be chasing or patrolling etc...
+        // therefore this simple class is used to ensure the guard is not doing anything else while searching
+
+        //disable the alerted UI element and enable the spotted UI element for Searching
+        _alertedSprite.DisableAlerted();
+        _searchingSprite.DisplaySearching();
+
+        state = NodeState.SUCCESS; 
+        return state;
+    }
+}
+using BehaviorTree;
+
+public class CheckSearch : Node
+{
+    // This class checks to see if the guard should be searching, return SUCCESS if they should be
+
+    private GuardBehaviourTree _guard;
+
+    public CheckSearch(GuardBehaviourTree guard)
+    {
+        _guard = guard;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // The organiseSearch variable is handled by the BTGuardGroup class
+        // return success if the group has organised a search
+        if (_guard.organiseSearch == true)
+        {
+            state = NodeState.SUCCESS;
+            return state;
+        }
+
+        else
+        { 
+            state = NodeState.FAILURE; 
+            return state;
+        }
+    }
+}
+using UnityEngine;
+using BehaviorTree;
+using UnityEngine.AI;
+
+public class GuardPatrol : Node
+{
+    // This class handles the patrolling of the guards around their patrol paths
+
+    private Transform _guardTransform;
+    private Transform[] _patrolPoints;
+    private NavMeshAgent _agent;
+    private GuardBehaviourTree _guard;
+    private AlertedSprite _alertedSprite;
+    private SearchingSprite _searchingSprite;
+
+    private int currentPatrolPoint;
+    private float patrolStopDuration = 2.5f;
+    private float patrolStopTimer = 0.0f;
+    private bool stopped = false;
+
+    public GuardPatrol(Transform guardTransform, Transform[] patrolPoints, NavMeshAgent agent, GuardBehaviourTree guard, AlertedSprite alertedSprite, SearchingSprite searchingSprite)
+    { 
+        _guardTransform = guardTransform;
+        _patrolPoints = patrolPoints;
+        _agent = agent;
+        _guard = guard;
+        _alertedSprite = alertedSprite;
+        _searchingSprite = searchingSprite;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // Method to set the patrol path of the guard
+
+        // disable UI entirely if the guard is patrolling
+        _alertedSprite.DisableAlerted();
+        _searchingSprite.DisableSearching();
+
+        Transform wp = _patrolPoints[currentPatrolPoint];
+
+        // since organise attack returns false to allow for the rest of the tree to be run, in order to chase and actually attack the guard
+        // the tree needs to make sure that the guard isnt patrolling either
+        // since there is no class used to check whether a guard should be patrolling or not
+        // there is some simple validation used which will return failure if the group are currently organising their attack
+        if (_guard.organiseAttack == true)
+        {
+            state = NodeState.FAILURE;
+            return state;
+        }
+
+        // if the guard is waiting along thier patrol path, start a timer and wait until they have waited the entire duration before moving on
+        if (stopped == true)
+        {
+            patrolStopTimer = patrolStopTimer + Time.deltaTime;
+            if (patrolStopTimer > patrolStopDuration)
+            {
+                stopped = false;
+            }
+        }
+
+        else if (stopped == false)
+        {
+            // if guard reaches a waypoint set their target to the next waypoint
+            if (Vector3.Distance(_guardTransform.position, wp.position) < (_agent.stoppingDistance + 0.2f))
+            {
+                patrolStopTimer = 0.0f;
+                stopped = true;
+
+                currentPatrolPoint = (currentPatrolPoint + 1) % _patrolPoints.Length;
+            }
+            else
+            {
+                _agent.SetDestination(wp.position);
+            }
+        }
+
+        // return running constantly 
+        // as its at the end of the tree, it can afford to do this as its not stopping anything else from running.
+        // success or running here would work just the same
+        state = NodeState.RUNNING;
+        return state;
+    }
+}
+
+using BehaviorTree;
+
+public class CheckEnemyInAttackRange : Node
+{
+    // This class checks to see if the guard is close enough to attack the player, returns SUCCESS if they are
+
+    private GuardBehaviourTree _guard;
+
+    public CheckEnemyInAttackRange(GuardBehaviourTree guard)
+    {
+        _guard = guard;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // The attackPlayer varibale is set in the CHeckEnemySpotted class
+        // The attack is only set to tru when the player is within zone 1 of the enemy`s vsion cone
+
+        if (_guard.attackPlayer == true)
+        {
+            state = NodeState.SUCCESS;
+            return state;
+        }
+
+        else
+        {
+            state = NodeState.FAILURE;
+            return state;
+        }
+    }
+}
+
+using BehaviorTree;
+using UnityEngine;
+
+public class GuardAttack : Node
+{
+    // This class was going to hold the functionality for the guard to actually shoot at the player and be able to deal damage to the player
+    // This class could never be implemented within the timeframe
+
+    private Light _spotlight;
+
+    public GuardAttack(Light spotlight) 
+    { 
+        _spotlight = spotlight;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // placeholder class for now, sets the spotlight color to red when the guard should be attacking
+        // This is where the actual attack perfropmed by a guard should be taking place
+
+        _spotlight.color = Color.red;
+        state = NodeState.SUCCESS;
+        return state;
+    }
+
+}
+
+using BehaviorTree;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class GuardChase : Node
+{
+    // This class implemnets very basic functionality to chase after the player if they have been spotted
+    // Due to the order that this class appears in the behaviour tree, it is unneccessary to chek whether the guard should be chasing or not
+    // This is because we have already determined that the guard can see the player AND we have determined that the guard is not clopse enough to attack
+    // Therefore the guard will chase 
+
+    private Transform _player;
+    private NavMeshAgent _agent;
+
+    public GuardChase(Transform player, NavMeshAgent agent)
+    {
+        _player = player;
+        _agent = agent;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // chases after the player by setting the nav,esh agent to the players location
+        _agent.SetDestination(_player.position);
+        state = NodeState.SUCCESS; 
+        return state;
+    }
+
+}
+
+using BehaviorTree;
+using UnityEngine;
+
+public class CheckEnemyZone : Node
+{
+    // This class uses basic geometry to dtermine which zone of the enemy`s vision cone the player is in
+    // Thw zone is then passed on to Check Enemy Spotted where that class can the potentially detect the player 
+
+    private Transform _transform;
+    private Transform _player;
+    private LayerMask _obstacleMask;
+    private GuardBehaviourTree _guard;
+
+    float angleA = 30;
+    float angleB = 90;
+    float angleC = 150;
+
+    float farViewingDist = 40.0f;
+    float mediumViewingDist = 25.0f;
+    float nearViewingDist = 15.0f;
+
+    public CheckEnemyZone(Transform transform, Transform player, LayerMask obstacleMask, GuardBehaviourTree guard)
+    {
+        _transform = transform;
+        _player = player;
+        _obstacleMask = obstacleMask;
+        _guard = guard;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // conditional statements to find out what zone a player is in
+        // always set to empty zone if any condition isnt met
+        
+        Vector3 distToPlayer = (_player.position - _transform.position).normalized;  
+        float playerGuardAngle = Vector3.Angle(_transform.forward, distToPlayer);  
+
+        // Checks if there is an obstacle between the guard and player
+        if (!Physics.Linecast(_transform.position, _player.position, _obstacleMask))
+        {
+            // Checks to see the distance between the guard and player
+            if (Vector3.Distance(_transform.position, _player.position) < nearViewingDist)  
+            {
+                // Checks to see the angle between the guard and player
+                if (playerGuardAngle < angleA / 2f)
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone1;
+                }
+
+                else if (playerGuardAngle < angleC / 2f)
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone2;
+                }
+
+                else
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
+                }
+            }
+
+            // Checks to see the distance between the guard and player
+            else if (Vector3.Distance(_transform.position, _player.position) < mediumViewingDist) 
+            {
+                // Checks to see the angle between the guard and player
+                if (playerGuardAngle < angleA / 2f)
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone2;
+                }
+
+                else if (playerGuardAngle < angleB / 2f)
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone3;
+                }
+
+                else if (playerGuardAngle < angleC / 2f)
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone4;
+                }
+
+                else
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
+                }
+            }
+
+            // Checks to see the distance between the guard and player
+            else if (Vector3.Distance(_transform.position, _player.position) < farViewingDist) 
+            {
+                // Checks to see the angle between the guard and player
+                if (playerGuardAngle < angleA / 2f)
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone3;
+                }
+
+                else if (playerGuardAngle < angleB / 2f)
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone4;
+                }
+
+                else if (playerGuardAngle < angleC / 2f)
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.zone5;
+                }
+
+                else
+                {
+                    _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
+                }
+            }
+
+            else
+            {
+                _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
+            }
+        }
+
+        else
+        {
+            _guard.zone = GuardBehaviourTree.ZoneState.emptyZone;
+        }
+
+        // Return success regardless of the outcome as outcomes can only be zones 1 through 5 and empty zone which are all necesary for the next leaf node 
+        state = NodeState.SUCCESS;
+        return state;
+    }
+}
+
+using BehaviorTree;
+using UnityEngine;
+
+public class CheckEnemySpotted : Node
+{
+    // This class checks how long the player has spent in any one of the enemy`s vision zones and reacts accordingly
+
+    private Light _spotlight;
+    private GuardBehaviourTree _guard;
+    private AlertedSprite _alertedSprite;
+    private SearchingSprite _searchingSprite;
+    private DetectionBarSprite _detectionBarSprite;
+
+    private float zone1Timer = 1.0f;
+    private float zone2Timer = 1.5f;
+    private float zone3Timer = 2.0f;
+    private float zone4Timer = 3.0f;
+    private float zone5Timer = 5.0f;
+
+    public CheckEnemySpotted(Light spotlight, GuardBehaviourTree guard, AlertedSprite alertedSprite, SearchingSprite searchingSprite, DetectionBarSprite detectionBarSprite)
+    {
+        _spotlight = spotlight;
+        _guard = guard;
+        _alertedSprite = alertedSprite;
+        _searchingSprite = searchingSprite;
+        _detectionBarSprite = detectionBarSprite;
+    }
+
+    public override NodeState Evaluate()
+    {
+        // Method to chase player if they are caught in a vision zone for enough time
+        // If player is within a zone, start a timer
+        // If timer exceeds limit, change spotlight colour to indicate detection and set bools
+
+        // timer doesnt exceed 0 or zone 5 timer
+        _guard.timePlayerVisible = Mathf.Clamp(_guard.timePlayerVisible, 0, zone5Timer);
+
+        if (_guard.zone == GuardBehaviourTree.ZoneState.zone1)
+        {
+            _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
+
+            // displaying the detction bar and setting its detection amount based on the current time
+            _detectionBarSprite.DisplayDetected();
+            _detectionBarSprite.SetDetection(_guard.timePlayerVisible/zone1Timer);
+
+            if (_guard.timePlayerVisible >= zone1Timer)
+            {
+                UIonDetection();
+                // The spotlight color is not set here ro zone 1, but is instead set in Guard Attack.
+                // This is to give the dev some feedback on when that class is running 
+                _guard.attackPlayer = true;
+                _guard.playerSeen = true;
+                _guard.playerVisible = true;
+            }
+        }
+
+        else if (_guard.zone == GuardBehaviourTree.ZoneState.zone2)
+        {
+            _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
+            _detectionBarSprite.DisplayDetected();
+            _detectionBarSprite.SetDetection(_guard.timePlayerVisible / zone2Timer);
+            if (_guard.timePlayerVisible >= zone2Timer)
+            {
+                UIonDetection();
+                _spotlight.color = Color.magenta;
+                _guard.attackPlayer = false;
+                _guard.playerSeen = true;
+                _guard.playerVisible = true;
+            }
+        }
+
+        else if (_guard.zone == GuardBehaviourTree.ZoneState.zone3)
+        {
+            _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
+            _detectionBarSprite.DisplayDetected();
+            _detectionBarSprite.SetDetection(_guard.timePlayerVisible / zone3Timer);
+            if (_guard.timePlayerVisible >= zone3Timer)
+            {
+                UIonDetection();
+                _spotlight.color = Color.yellow;
+                _guard.attackPlayer = false;
+                _guard.playerSeen = true;
+                _guard.playerVisible = true;
+            }
+        }
+
+        else if (_guard.zone == GuardBehaviourTree.ZoneState.zone4)
+        {
+            _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
+            _detectionBarSprite.DisplayDetected();
+            _detectionBarSprite.SetDetection(_guard.timePlayerVisible / zone4Timer);
+            if (_guard.timePlayerVisible >= zone4Timer)
+            {
+                UIonDetection();
+                _spotlight.color = Color.green;
+                _guard.attackPlayer = false;
+                _guard.playerSeen = true;
+                _guard.playerVisible = true;
+            }
+        }
+
+        else if (_guard.zone == GuardBehaviourTree.ZoneState.zone5)
+        {
+            _guard.timePlayerVisible = _guard.timePlayerVisible + Time.deltaTime;
+            _detectionBarSprite.DisplayDetected();
+            _detectionBarSprite.SetDetection(_guard.timePlayerVisible / zone5Timer);
+            if (_guard.timePlayerVisible >= zone5Timer)
+            {
+                UIonDetection();
+                _spotlight.color = Color.blue;
+                _guard.attackPlayer = false;
+                _guard.playerSeen = true;
+                _guard.playerVisible = true;
+            }
+        }
+
+        // if player is not in a zone, decrement the timer
+        else if (_guard.zone == GuardBehaviourTree.ZoneState.emptyZone)
+        {
+            _alertedSprite.DisableAlerted();
+            _detectionBarSprite.DisplayDetected();
+            _detectionBarSprite.SetDetection(_guard.timePlayerVisible/zone5Timer);
+            _spotlight.color = Color.white;
+            _guard.attackPlayer = false;
+            _guard.playerVisible = false;
+            _guard.timePlayerVisible = _guard.timePlayerVisible - Time.deltaTime;
+
+            // if the player is no longer visible and timer ticks down to 0, return false so that the guard doesnt chase or attack
+            if (_guard.timePlayerVisible <= 0)
+            {
+                _detectionBarSprite.DisableDetected();
+                _searchingSprite.DisableSearching();
+                state = NodeState.FAILURE;
+                return state;
+            }
+        }
+
+        // return success if the player is detected in any zone from 1 through 5
+        state = NodeState.SUCCESS;
+        return state;
+    }
+
+    public void UIonDetection()
+    {
+        // method to make it quicker to set UI elements when the player has been fully spotted
+
+        _detectionBarSprite.DisableDetected();
+        _alertedSprite.DisplayAlerted();
+        _searchingSprite.DisableSearching();
+    }
+
+}
+
+using BehaviorTree;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+// This file implemnets the basic behaviour tree loop for the Guard AI in the game
+
+public class GuardBehaviourTree : BehaviorTree.Tree
+{
+    [Header("Patrol Points")]
+    public Transform[] patrolPoints;
+
+    [Header("Objects")]
+    public LayerMask obstacleMask;
+    public Transform player;
+    public NavMeshAgent agent;
+    public Light spotlight;
+    public GuardBehaviourTree guard;
+
+    [Header("Smoke")]
+    // Part of additional smoke implementation. Currently not working
+    // Transform and LayerMask required as part of Check Smoke(Class not included in tree currently) and Check Enemy Zone respectively
+
+    //public Transform smoke;
+    //public LayerMask smokeMask;
+
+    //public bool smokeVisible = false;
+    //public bool smokeSeen = false;
+
+    [Header("Sprites")]
+    public AlertedSprite alertedSprite;
+    public SearchingSprite searchingSprite;
+    public DetectionBarSprite detectionBarSprite;
+
+    [Header("Booleans")]
+    public bool attackPlayer = false;
+    public bool playerSeen = false;
+    public bool playerVisible = false;
+
+    public bool search1 = false;
+    public bool search2 = false;
+
+    [Header("Timer")]
+    public float timePlayerVisible;
+
+    [Header("Organise")]
+    public bool organiseAttack;
+    public bool organiseSearch;
+
+    [Header("Zones")]
+    public ZoneState zone;
+    public enum ZoneState
+    {
+        emptyZone,
+        zone1,
+        zone2,
+        zone3,
+        zone4,
+        zone5
+    }
+
+    protected override Node SetupTree()
+    {
+        // Structure for Guard behaviour tree
+
+        Node root = new Selector(new List<Node>
+        {
+            /*
+            // Classes for checking if the guard can see smoke and reacting accordingly
+            // Currently not working
+            
+            new Sequence (new List<Node>
+            { 
+                new CheckSmoke(transform, agent, obstacleMask, guard),
+                new GuardSmokeResponse(guard),
+            }),
+            */
+
+            // First sequnce checks if the other guards are attacking, if they are it sends the current guard to go attack as well
+            new Sequence (new List<Node>
+            {
+                new CheckAttack(guard),
+                new GroupAttack(player, agent),
+            }),
+
+            // Second sequence handles detection of the PLayer and what to do once the player is detected based on if they are within attack range or not
+            new Sequence (new List<Node>
+            { 
+                new CheckEnemyZone(transform, player, obstacleMask, guard),
+
+                new CheckEnemySpotted(spotlight, guard, alertedSprite, searchingSprite, detectionBarSprite),
+
+                new Selector(new List<Node>
+                { 
+                    new Sequence(new List<Node>
+                    {
+                        new CheckEnemyInAttackRange(guard),
+                        new GuardAttack(spotlight),
+                    }),
+
+                    new GuardChase(player, agent),
+                }),
+            }),
+            
+            // Third sequence checks if other guards are currently searching, if they are, the current guard will join the search
+            new Sequence (new List<Node>
+            { 
+                new CheckSearch(guard),
+                new GroupSearch(alertedSprite, searchingSprite),
+            }),
+
+            // The last Node runs if nothing else returned a SUCCESS
+            // This node just keeps the guard patrolling aroudn a set of points
+            new GuardPatrol(transform, patrolPoints, agent, guard, alertedSprite, searchingSprite),
+
+        });
+
+        return root;
+    }
+}
+
+using UnityEngine;
+
+// This class handles a group of guards
+// It controls when they cooridnate attacks
+// It also completely controls when, where and how long each guard searches for 
+
+public class BTGuardGroup : MonoBehaviour
+{
+    [Header("Random")]
+    System.Random rnd = new System.Random();
+
+    [Header("Guards")]
+    public GuardBehaviourTree[] guards;
+
+    [Header("Search Locations")]
+    public Transform loc0;
+    public Transform loc1;
+    public Transform loc2;
+    public Transform loc3;
+    public Transform loc4;
+    public Transform loc5;
+    public Transform loc6;
+    public Transform loc7;
+    public Transform loc8;
+    public Transform loc9;
+
+    [Header("Search Timer")]
+    public float searchTimer;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Continuos loop running in order to chekc if any of the guards have seen the player but have since lost sight of him
+        for (int i = 0; i < guards.Length; i++)
+        {
+            // If a guard has seen the player, loop through all guards and tell all of the them to organise a search 
+            if (guards[i].playerSeen == true && guards[i].playerVisible == false)
+            {
+                for (int j = 0; j < guards.Length; j++)
+                {
+                    guards[j].organiseSearch = true;
+                }
+                ConductSearch();
+                break;
+            }
+        }
+
+        ConductAttack();
+    }
+
+    void ConductSearch()
+    {
+        // Method conducts the timer for the guards search pattern and resets the serach if the player hsnt been found in teh allotted time
+
+        // Search for 'serachTimer' seconds then reset to start location
+        searchTimer = searchTimer + Time.deltaTime;
+
+        // Set all guards to search one place until 'x' sec and another until 'y' sec
+        for (int i = 0; i < guards.Length; i++)
+        {
+            if (searchTimer > 5 && searchTimer < 25 && guards[i].search1 == false)
+            {
+                GuardSearch(guards[i]);
+                guards[i].search1 = true;
+            }
+
+            if (searchTimer > 25 && searchTimer < 40 && guards[i].search2 == false)
+            {
+                GuardSearch(guards[i]);
+                guards[i].search2 = true;
+            }
+
+            // After 40 sec, tell guards to go back to starting location
+            if (searchTimer > 40)
+            {
+                ResetSearch();
+            }
+        }
+    }
+
+    void ConductAttack()
+    {
+        // Method mainly organises attack
+        // Method also has functionlaity for disbanding the attack if none of the guards can see the player
+
+        int guardsNotSeeingPlayer = 0;
+
+        // Loops through all guards to see if any are currently looking at the player
+        for (int i = 0; i < guards.Length; i++)
+        {
+            // If a guard is looking at the player, reset the guards Search variables and organise an attack
+            if (guards[i].playerVisible == true)
+            {
+                searchTimer = 0;
+                for (int j = 0; j < guards.Length; j++)
+                {
+                    guards[j].search1 = false;
+                    guards[j].search2 = false;
+                    guards[j].organiseAttack = true;
+                }
+            }
+
+            // if no gurad is looking at the player, increment a variable
+            // This variable can be used to compare againts the total number of guards in a group
+            else
+            {
+                guardsNotSeeingPlayer = guardsNotSeeingPlayer + 1;
+            }
+
+            // If all of the guards cannot see the player, stop attacking 
+            if (guardsNotSeeingPlayer == guards.Length)
+            {
+                for (int j = 0; j < guards.Length; j++)
+                {
+                    guards[j].organiseAttack = false;
+                }
+                guardsNotSeeingPlayer = 0;
+            }
+        }
+    }
+
+    void GuardSearch(GuardBehaviourTree guard)
+    {
+        // Method to randomly assign a guard to a search location
+        // Search location are set by empty gameObjects`s transforms in Unity
+
+        // Random variable to assign a guard with a random search location
+        float rand = rnd.Next(0, 10);
+
+        switch (rand)
+        {
+            case 0:
+                guard.agent.SetDestination(loc0.position);
+                break;
+            case 1:
+                guard.agent.SetDestination(loc1.position);
+                break;
+            case 2:
+                guard.agent.SetDestination(loc2.position);
+                break;
+            case 3:
+                guard.agent.SetDestination(loc3.position);
+                break;
+            case 4:
+                guard.agent.SetDestination(loc4.position);
+                break;
+            case 5:
+                guard.agent.SetDestination(loc5.position);
+                break;
+            case 6:
+                guard.agent.SetDestination(loc6.position);
+                break;
+            case 7:
+                guard.agent.SetDestination(loc7.position);
+                break;
+            case 8:
+                guard.agent.SetDestination(loc8.position);
+                break;
+            case 9:
+                guard.agent.SetDestination(loc9.position);
+                break;
+        }
+    }
+
+    void ResetSearch()
+    {
+        // Method to reset ALL of the search variables, should the player not be found 
+        searchTimer = 0;
+        for (int i = 0; i < guards.Length; i++)
+        {
+            guards[i].organiseSearch = false;
+            guards[i].playerSeen = false;
+            guards[i].search1 = false;
+            guards[i].search2 = false;
+        }
+    }
+
+}
+
+using UnityEngine;
+
+// Class to destroy the smoke prefab after a set amount of time
+
+public class DestroySmoke : MonoBehaviour
+{
+    float destroyTimer = 0;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        destroyTimer += Time.deltaTime;
+
+        // Destroy timer limit specifically set to 12.5 because smoke lasts 11 ish seconds
+        // a change in the the limit would cause the game object top be around for too long after the smoke completes
+        // I.e the guards would not be able to see through wher the smoke was even though the smoke is no longer there
+        // OR if the limit was much lower, the smoke would dissapear unnnaturally and the effect would not look proper
+        if (destroyTimer > 12.5f)
+        {
+            Destroy(gameObject);
+        }
+    }
+}
+
+public float throwCooldown; //[ME]
+    public int bombCount; //[ME]
+    bool readyToThrow = true; //[ME]
+
+readyToThrow = false; //[ME]
+
+bombCount = bombCount - 1; //[ME]
+
+Invoke(nameof(ResetThrow), throwCooldown); //[ME]
+
+readyToThrow = true; //[ME]
+
+using UnityEngine;
+using UnityEngine.UI;
+
+public class AlertedSprite : MonoBehaviour
+{
+    // class that enables or diables visibility of the Alerted UI element.
+
+    public Image image;
+
+    public void DisplayAlerted()
+    {
+        image.enabled = true;
+    }
+
+    public void DisableAlerted() 
+    { 
+        image.enabled = false;
+    }
+
+}
+
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SearchingSprite : MonoBehaviour
+{
+    // class that enables or diables visibility of the Searching UI element.
+
+    public Image image;
+
+    public void DisplaySearching()
+    {
+        image.enabled = true;
+    }
+
+    public void DisableSearching()
+    {
+        image.enabled = false;
+    }
+}
+
+using UnityEngine;
+using UnityEngine.UI;
+
+public class DetectionBarSprite : MonoBehaviour
+{
+    // Class for the guard`s Detection bar
+    // class sets the current detection amount as well as enabling and disabling the bar
+
+    public Slider slider;
+    public Gradient gradient;
+
+    public Image fill;
+    public Image border;
+    public Image binoculars;
+
+    public void SetDetection(float detection)
+    {
+        // Sets the detection level of the bar. 
+        // variable 'detection' comes from CheckGuardSpotted class
+        slider.normalizedValue = detection;
+
+        // Sets the colour of the bar based on the amount the player is spotted 
+        fill.color = gradient.Evaluate(slider.normalizedValue);
+    }
+
+    public void DisplayDetected()
+    { 
+        fill.enabled = true;
+        border.enabled = true;
+        binoculars.enabled = true;
+    }
+
+    public void DisableDetected()
+    {
+        fill.enabled = false;
+        border.enabled = false;
+        binoculars.enabled = false; 
+    }
+
+}
+
+using UnityEngine;
+
+public class PlayerZipline : MonoBehaviour
+{
+    // This class implemnets zipline functionality for the player
+
+    [Header("Currently on Zipline?")]
+    public bool zipping = false;
+
+    [Header("Keyboard Control")]
+    public KeyCode ziplineKey = KeyCode.E;
+
+    [Header("Objects")]
+    public Rigidbody rb;
+    public PlayerMovement pm;
+
+    private Vector3 startposition;
+    private Vector3 endPosition;
+
+    private Zipline currentZipline;
+
+    private float yOffset = 1f;
+    private float Radius = 2f;
+
+    private float ZiplineTime = 10.0f;
+    private float totalTime; 
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        // If the kley is pressed, ther will be a check of the surrounding area of the player to see if there ziplines there
+        if (Input.GetKeyDown(ziplineKey))
+        {
+            RaycastHit[] hits = Physics.SphereCastAll(transform.position + new Vector3(0, yOffset, 0), Radius, Vector3.up);
+
+            for (int i = 0; i < hits.Length; i++)
+            {
+                // If there is a zipline near the player AND it has a valid landing zone, the player will latch on to the zipline
+                if (hits[i].collider.tag == "Zipline")
+                {
+                    currentZipline = hits[i].collider.gameObject.GetComponent<Zipline>();
+
+                    if (currentZipline.landingZone != null) 
+                    { 
+                        zipping = true;
+                        startposition = transform.position;
+                        endPosition = currentZipline.landingZone.zipHookPoint.position;
+
+                        // Disable the player movement script, stop using gravity and turn the rigidbody to kinematic
+                        // This is done as it helps prevent juddering when using the zipline
+                        pm.enabled = false;
+                        rb.useGravity = false;
+                        rb.isKinematic = true;
+                    }
+                }
+            }
+        }
+
+        if (zipping)
+        {
+            Zip();
+        }
+    }
+
+    void Zip()
+    {
+        // Method uses linear interpolation between the taget point and starting point to send the player down the zipline
+
+        totalTime += Time.deltaTime;
+        float percentageCompleted = totalTime / ZiplineTime;
+        transform.position = Vector3.Lerp(startposition, endPosition, percentageCompleted);
+
+        if (percentageCompleted >= 0.99f)
+        { 
+            zipping = false;
+
+            pm.enabled = true;
+            rb.useGravity = true;
+            rb.isKinematic = false;
+
+            totalTime = 0;
+            percentageCompleted = 0;
+        }
+    }
+}
+
+using UnityEngine;
+
+public class Zipline : MonoBehaviour
+{
+    // Extremely basic class
+    // Simply makes it easier to call the zipline and their associated targets from the PLayerZipline class
+
+    public Zipline landingZone;
+    public Transform zipHookPoint;
+}
