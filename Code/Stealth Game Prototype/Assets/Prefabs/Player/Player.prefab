@@ -589,6 +589,7 @@ GameObject:
   - component: {fileID: 2836446972469821421}
   - component: {fileID: 2836446972469821422}
   - component: {fileID: 2836446972469821423}
+  - component: {fileID: 2221428199175064932}
   - component: {fileID: -2662158755450590099}
   m_Layer: 7
   m_Name: Player
@@ -683,7 +684,7 @@ MonoBehaviour:
   Orienatation: {fileID: 2836446973233375752}
   bombCountText: {fileID: 1374358406}
   grenadekey: 103
---- !u!114 &-2662158755450590099
+--- !u!114 &2221428199175064932
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -692,13 +693,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 2836446972469821411}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de79d246cc8edd446a2b2969b7fd3fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkOffset: 1
+  checkRadius: 2
+--- !u!114 &-2662158755450590099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836446972469821411}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 947caf7e9a592924fb06022b57f0a2d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zipping: 0
-  ziplineKey: 101
-  rb: {fileID: 0}
-  pm: {fileID: 0}
+  currentZipline: {fileID: 0}
+  targetZipline: {fileID: 0}
+  checkOffset: 1
+  checkRadius: 2
 --- !u!1 &2836446972718668638
 GameObject:
   m_ObjectHideFlags: 0
